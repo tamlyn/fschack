@@ -1,0 +1,16 @@
+live:
+  db:
+    adapter: Pdo_Mysql
+    params:
+      host: 127.0.0.1
+      dbname:
+      username:
+      password:
+
+alpha:
+  _extends: live
+  db:
+    params:
+      dbname:
+      username:
+      password:

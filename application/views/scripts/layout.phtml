@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="baseUrl" content="<?php echo $this->baseUrl('/'); ?>">
+	<title><?php echo strip_tags($this->title); ?></title>
+	<?php
+	echo $this->headLink()
+	?>
+</head>
+<body>
+
+<div id="wrapper">
+	<h1><?php echo $this->title; ?></h1>
+</div>
+<div id="content" class="clearfix">
+	<?php echo $this->FlashMessages(); ?>
+	<?php echo $this->layout()->content; ?>
+</div>
+</div>
+<?php
+echo $this->headScript()
+		->appendFile('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js')
+		->appendFile('assets/js/main.js')
+?>
+
+</body>
+</html>
