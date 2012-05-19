@@ -1,0 +1,14 @@
+<ul>
+	<?php foreach ($this->sites as $site) : ?>
+	<li>
+		<?php echo $site->name; ?>
+		<ul>
+			<?php foreach ($site->data as $type=>$values) : ?>
+			<li>
+				<?php echo $type; ?>: <?php echo implode(', ', $values); ?>
+			</li>
+			<?php endforeach; ?>
+		</ul>
+	</li>
+	<?php endforeach; ?>
+</ul>
