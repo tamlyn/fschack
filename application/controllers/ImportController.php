@@ -5,8 +5,32 @@ require_once 'lib/Excel/reader.php';
 class ImportController extends BaseController
 {
 	public function indexAction() {
+		$this->view->sites = array();
+		if ($this->_request->isPost()) {
+			if (!isset($_FILES['file'])) {
+				$this->_helper->FlashMessenger(array('error'=>'Please select an excel file'));
+			} else {
+				$fileInfo = $_FILES['file'];
+				if ($fileInfo['error']) {
+					$this->_helper->FlashMessenger(array('error'=>$fileInfo['error']));
+				} else if ($fileInfo['type'] != 'application/vnd.ms-excel') {
+					$this->_helper->FlashMessenger(array('error'=>'Wrong file type. Must be excel (.xls)'));
+				} else {
+					try {
+						$sites = $this->readExcel($fileInfo['tmp_name']);
+						$this->view->sites = $sites;
+					} catch (Exception $ex) {
+						$this->_helper->FlashMessenger(array('error'=>'Cannot read excel file: ' . $ex->getMessage()));
+					}
+				}
+			}
+//			$this->_helper->redirector->gotoRoute(array('action'=>'index'));
+		}
+	}
+	
+	private function readExcel($filename) {
 		$data = new Spreadsheet_Excel_Reader();
-		$data->read('C:\Users\Rasmus\Desktop\Rivers Secondary\09-3 River Harbourne March 2009.xls');
+		$data->read($filename);
 		$sheet = $data->sheets[0];
 //print_r($sheet['cells']);
 
@@ -46,7 +70,7 @@ class ImportController extends BaseController
 				}
 			}
 		}
-		$this->view->sites = $sites;
+		return $sites;
 	}
 }
 

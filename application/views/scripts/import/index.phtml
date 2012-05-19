@@ -1,3 +1,9 @@
+<form method="post" action="<?php echo $this->url(); ?>" enctype="multipart/form-data">
+	<input type="file" name="file" />
+	<input type="submit" value="Upload" />
+</form>
+
+
 <ul>
 	<?php foreach ($this->sites as $site) : ?>
 	<li>
