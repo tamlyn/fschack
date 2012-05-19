@@ -4,6 +4,13 @@ class Model_Site extends Model_Base{
 	public $id;
 	private $_tableName = 'sites';
 
+	public function save()
+	{
+		parent::save();
+		$q = "insert into sitealias (site_id, alias, centre) VALUES (?, ?, ?)";
+		$this->_db->execute($q,array($this->id, $this->title, $this->centre));
+	}
+
 	static function fetchByCentreAndTitle($centre, $title){
 		$q = "select * from site_alias a left join sites s on s.id = a.site_id where s.centre = ? and a.alias = ?";
 		$db = Zend_Registry::get('db')->getConnection();

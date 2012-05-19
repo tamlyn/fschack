@@ -18,6 +18,11 @@ abstract class Model_Base
 		}
 	}
 
+	static function insert($data){
+		$me = new static($data);
+		$me->save();
+	}
+
 	public function getColumnNames()
 	{
 		$classname = get_called_class();
