@@ -5,15 +5,15 @@ class Model_Investigation extends Model_Base{
 
 	static function insert($data){
 		$investigation = new Model_Investigation($data);
+		$investigation->date = $investigation->date;
+		$investigation->centre = $investigation->centre;
 		$investigation->save();
 		foreach($data->siteInvestigations as $siteInvestigation){
 			print_r($siteInvestigation);
 			$site = Model_Site::fetchByCentreAndTitle($investigation->centre, $siteInvestigation->site_name);
 			if(!$site){
 				$site = new Model_Site();
-				$site->date = $investigation->date;
 				$site->centre = $investigation->centre;
-				$site->schoolName = $siteInvestigation->site_name;
 				$site->save();
 			}
 			$siteInv = new Model_SiteInvestigation();
