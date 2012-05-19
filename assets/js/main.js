@@ -26,6 +26,15 @@ app.init = {
 			google.load('visualization', '1.0', {'packages':['corechart']});
 
 			google.setOnLoadCallback(app.charts.draw);
+		},
+
+		'.dtable': function(){
+			$('.dtable').dataTable({
+				bPaginate:false,
+				aaSorting:[
+					[1, 'desc']
+				]
+			});
 		}
 	}
 };
