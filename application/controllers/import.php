@@ -3,7 +3,7 @@
 require_once 'lib/Excel/reader.php';
 
 $data = new Spreadsheet_Excel_Reader();
-$data->read('C:\Users\Rasmus\Desktop\Rivers Secondary\09-3 River Harbourne March 2009.xls');
+// $data->read('C:\www\fschack\application\data\09-3 River Harbourne March 2009.xls');
 $sheet = $data->sheets[0];
 //print_r($sheet['cells']);
 

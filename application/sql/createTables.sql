@@ -2,18 +2,24 @@ create table sites (
 	id int auto_increment, 
 	lat float,
 	lon float,
-	site varchar (255),
+	title varchar(255),
+	centre varchar(255),
 	unique index(id),
 	index(lat),
 	index(lon),
 	index(site)
 )
 
-create table group(
+create table siteAlias(
+	site_id int,
+	alias varchar(255)
+)
+
+create table team(
 	id int auto_increment,
 	startdate date,
-	schoolName varchar(255)
-	unique index(id),
+	schoolName varchar(255),
+	unique index(id)
 )
 
 create table siteInvestigations(
