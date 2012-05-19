@@ -46,13 +46,7 @@ app.charts = {
 		data = new google.visualization.DataTable();
 		data.addColumn('string', 'Measurement');
 		data.addColumn('number', 'Depth');
-		data.addRows([
-			['1', 3],
-			['2', 1],
-			['3', 1],
-			['4', 1],
-			['5', 2]
-		]);
+		data.addRows(window.graphData);
 
 		// Set chart options
 		var options = {
