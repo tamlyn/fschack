@@ -26,7 +26,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `investigation`
 --
 
-CREATE TABLE IF NOT EXISTS `investigation` (
+CREATE TABLE IF NOT EXISTS `investigations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `startDate` date DEFAULT NULL,
   `schoolName` varchar(255) DEFAULT NULL,
