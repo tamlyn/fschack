@@ -6,4 +6,4 @@ investigations:
   controller: investigation
 import:
   label: Import data
-  controller: import
+  controller: upload

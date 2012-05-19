@@ -1,5 +1,21 @@
-<ul>
+<table>
+	<tr>
+		<th>Date</th>
+		<th>Centre</th>
+		<th>School</th>
+		<th>Group</th>
+		<th></th>
+	</tr>
 	<?php foreach ($this->investigations as $investigation): ?>
-	<li><a href="<?php echo $this->url(array()); ?>"><?php echo $investigation->name; ?></a></li>
+	<tr>
+		<td><?php echo $investigation->date; ?></td>
+		<td><?php echo $investigation->centre; ?></td>
+		<td><?php echo $investigation->school; ?></td>
+		<td><?php echo $investigation->group; ?></td>
+		<td>
+			<a href="<?php echo $this->url(array('action' => 'view', 'id' => $investigation->id)); ?>">View</a>
+			<a href="<?php echo $this->url(array('action' => 'export', 'id' => $investigation->id)); ?>">Export as CSV</a>
+		</td>
+	</tr>
 	<?php endforeach; ?>
-</ul>
+</table>

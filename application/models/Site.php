@@ -2,10 +2,18 @@
 
 class Model_Site extends Model_Base{	
 	public $id;
-	private $_tableName = 'sites';
+	protected $_tableName = 'sites';
+
+	public function save()
+	{
+		parent::save();
+		$q = "insert into sitealias (site_id, alias, centre) VALUES (?, ?, ?)";
+		$stmt = $this->_db->prepare($q)->execute(array($this->id, $this->title, $this->centre));
+
+	}
 
 	static function fetchByCentreAndTitle($centre, $title){
-		$q = "select * from site_alias a left join sites s on s.id = a.site_id where s.centre = ? and a.alias = ?";
+		$q = "select * from sitealias a left join sites s on s.id = a.site_id where s.centre = ? and a.alias = ?";
 		$db = Zend_Registry::get('db')->getConnection();
 		$query = $db->prepare($q);
 		$query->execute(array($centre, $title));
@@ -16,7 +24,7 @@ class Model_Site extends Model_Base{
 			return null;
 		}
 	}
-	
+	/*
 	function getId(){
 		$q = "select site_id from site_alias a left join sites s on s.id = a.site_id where a.alias = ? and s.centre = ?";
 		$query = $this->_db->prepare($q);
@@ -30,7 +38,7 @@ class Model_Site extends Model_Base{
 			$siteId = $this->_db::lastInsertId();
 		}
 		return $siteId;
-	}
+	}*/
 	
 	
 	

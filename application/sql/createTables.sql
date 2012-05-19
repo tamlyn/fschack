@@ -26,10 +26,11 @@ SET time_zone = "+00:00";
 -- Table structure for table `investigation`
 --
 
-CREATE TABLE IF NOT EXISTS `investigation` (
+CREATE TABLE IF NOT EXISTS `investigations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `startDate` date DEFAULT NULL,
   `schoolName` varchar(255) DEFAULT NULL,
+  `centre` varchar(255) DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -60,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `measurements` (
 CREATE TABLE IF NOT EXISTS `sitealias` (
   `site_id` int(11) DEFAULT NULL,
   `alias` varchar(255) DEFAULT NULL,
+  `centre` varchar(255) DEFAULT NULL,
   KEY `alias` (`alias`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

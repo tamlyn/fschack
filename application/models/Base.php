@@ -13,9 +13,14 @@ abstract class Model_Base
 		$this->_row = array();
 		$this->_isNew = !$fromDb;
 
-		if (is_array($data)) {
+		if (is_array($data) || is_object($data)) {
 			$this->fromArray($data);
 		}
+	}
+
+	static function insert($data){
+		$me = new static($data);
+		$me->save();
 	}
 
 	public function getColumnNames()
