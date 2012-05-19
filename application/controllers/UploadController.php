@@ -185,16 +185,21 @@ class UploadController extends BaseController {
 				}
 
 				$this->view->imported = $allInvestigations;
+				$this->emptyTempDir();
 			}
 		}
 	}
 
-	private function saveTempFile($fileInfo) {
+	private function emptyTempDir() {
 		if ($handle = opendir($this->tmpPath)) {
 			while (false !== ($entry = readdir($handle))) {
 				unlink($this->tmpPath . $entry);
 			}
 		}
+	}
+
+	private function saveTempFile($fileInfo) {
+		$this->emptyTempDir();
 		$target = $this->tmpPath . $fileInfo['name'];
 		if (!move_uploaded_file($fileInfo['tmp_name'], $target)) {
 			$this->_helper->FlashMessenger(array('error'=>'Upload error'));
