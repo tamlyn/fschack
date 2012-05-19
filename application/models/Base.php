@@ -123,7 +123,7 @@ abstract class Model_Base
 	public function fromArray($data)
 	{
 		if ($data) {
-			foreach ($data as $key => $value) {
+			foreach ((array) $data as $key => $value) {
 				if (in_array($key, $this->columnNames)) {
 					$this->{$key} = $value;
 				}
