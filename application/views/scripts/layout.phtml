@@ -12,12 +12,18 @@
 <body>
 
 <div id="wrapper">
-	<h1><?php echo $this->title; ?></h1>
-</div>
-<div id="content" class="clearfix">
-	<?php echo $this->FlashMessages(); ?>
-	<?php echo $this->layout()->content; ?>
-</div>
+	<div id="main-header">
+		<div id="nav-bar">
+			<div id="nav">
+				<?php echo $this->navigation()->menu()->setMaxDepth(1); ?>
+			</div>
+		</div>
+		<h1><?php echo $this->title; ?></h1>
+	</div>
+	<div id="content" class="clearfix">
+		<?php echo $this->FlashMessages(); ?>
+		<?php echo $this->layout()->content; ?>
+	</div>
 </div>
 <?php
 echo $this->headScript()
