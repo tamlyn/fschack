@@ -179,6 +179,7 @@ class UploadController extends BaseController {
 						$investigation->date = $this->view->date;
 						$investigation->school = $this->view->school;
 						$investigation->centre = $this->view->centre;
+						Model_Investigation::insert($investigation);
 //						$investigation->save();
 						$allInvestigations[] = $investigation;
 					}
@@ -212,19 +213,19 @@ class UploadController extends BaseController {
 		$sites = array();
 		for ($col = 2; $col <= $sheet['numCols']; $col++) {
 			if (isset($sheet['cells'][$sitesRow][$col])) {
-				$sites[$col] = (object)array('site_name'=>$sheet['cells'][$sitesRow][$col]);
+				$sites[$col] = (object)array('site_name'=>$sheet['cells'][$sitesRow][$col], 'data'=>array());
 			}
 		}
 
 		foreach ($sites as $col=>$siteData) {
 			foreach ($fields as $type=>$rows) {
-				$siteData->$type = array();
+				$siteData->data[$type] = array();
 				foreach ($rows as $row) {
-					$siteData->{$type}[] = (isset($sheet['cells'][$row][$col]) ? $sheet['cells'][$row][$col] : '');
+					$siteData->data[$type][] = (isset($sheet['cells'][$row][$col]) ? $sheet['cells'][$row][$col] : '');
 				}
 			}
 		}
-		return (object)array('sites'=>array_values($sites));
+		return (object)array('siteInvestigations'=>array_values($sites));
 	}
 }
 
