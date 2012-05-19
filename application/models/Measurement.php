@@ -6,5 +6,3 @@ class Model_Measurement extends Model_Base{
 
 
 }
-
-?>

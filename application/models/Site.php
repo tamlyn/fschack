@@ -45,5 +45,3 @@ class Model_Site extends Model_Base{
 	
 
 }
-
- ?>
