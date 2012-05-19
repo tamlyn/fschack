@@ -13,21 +13,6 @@ class Model_SiteInvestigation extends Model_Base{
 		return $this->getMeasurementsByType('river_depth');
 	}
 	
-	function getSiteId(){
-		$q = "select site_id from site_alias a left join sites s on s.id = a.site_id where a.alias = ? and s.centre = ?";
-		if(!$siteId = $this->executeQuery($q, array($this->title, $this->centre))){
-			$q = "insert into sites (id, title) VALUES (?, ?);";
-			$this->executeQuery($q);
-			$q = "insert into site_alias (site_id, alias) VALUES (?, ?);";
-			$siteId = $this->executeQuery($q);
-		}
-	}
-	
-	
-	
-	
-	
-	
 
 }
 

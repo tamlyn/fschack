@@ -4,26 +4,21 @@ class Model_Site extends Model_Base{
 	public $id;
 	private $_tableName = 'sites';
 	
-	function getMeasurmentsByType(){
-		$q = "select * from measurements where type = ? and siteInvestigationId = ?";
-		return $this->executeQuery($q, array($type, $this->id));
-	}
 	
-	function getDepths(){
-		return $this->getMeasurementsByType('river_depth');
-	}
-	
-	function getSiteId(){
+	function getId(){
 		$q = "select site_id from site_alias a left join sites s on s.id = a.site_id where a.alias = ? and s.centre = ?";
-		if(!$siteId = $this->executeQuery($q, array($this->title, $this->centre))){
+		$query = $this->_db->prepare($q);
+		$query->execute(array($this->title, $this->centre));
+		$siteId = $query->fetch()->id;
+		if(!$siteId){
 			$q = "insert into sites (id, title) VALUES (?, ?);";
-			$this->executeQuery($q);
+			$this->_db->exec($q);
 			$q = "insert into site_alias (site_id, alias) VALUES (?, ?);";
-			$siteId = $this->executeQuery($q);
+			$this->_db->exec($q);
+			$siteId = $this->_db::lastInsertId();
 		}
+		return $siteId;
 	}
-	
-	
 	
 	
 	
