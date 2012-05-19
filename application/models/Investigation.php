@@ -7,12 +7,16 @@ class Model_Investigation extends Model_Base{
 		$investigation = new Model_Investigation($data);
 		$investigation->save();
 		foreach($data->siteInvestigations as $siteInvestigation){
-			$site = Model_Site::fetchByCentreAndTitle($investigation->centre, $siteInvestigation->name);
+			print_r($siteInvestigation);
+			$site = Model_Site::fetchByCentreAndTitle($investigation->centre, $siteInvestigation->site_name);
 			if(!$site){
-				$site = new Model_Site(array($investigation->centre, $siteInvestigation->name));
+				$site = new Model_Site();
+				$site->date = $investigation->date;
+				$site->centre = $investigation->centre;
+				$site->schoolName = $siteInvestigation->site_name;
 				$site->save();
 			}
-			$siteInv = new Model_Investigation($siteInvestigation);
+			$siteInv = new Model_SiteInvestigation();
 			$siteInv->siteId = $site->id;
 			$siteInv->investigationId = $investigation->id;
 			$siteInv->save();
@@ -20,13 +24,11 @@ class Model_Investigation extends Model_Base{
 			foreach($siteInvestigation->data as $type => $values){
 //				$q = "INSERT INTO measurements (siteInvestigationId, type, investigationSeriesIndex, value) VALUES (?,?,?,?)";
 				foreach($values as $i => $value){
-					$tmp = array(
-						'siteInvestigationId' => $siteInvestigation->id,
-						'type' => $type,
-						'investigationSeriesIndex' => $i,
-						'value' => $value,
-					);
-					$measurement = new Model_Measurement($tmp);
+					$measurement = new Model_Measurement();
+					$measurement->siteInvestigationId = $siteInv->id;
+					$measurement->type = $type;
+					$measurement->investigationSeriesIndex = $i;
+					$measurement->value = $value;
 					$measurement->save();
 				}
 			}
