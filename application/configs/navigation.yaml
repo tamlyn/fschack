@@ -1,0 +1,9 @@
+home:
+  label: Home
+  controller: index
+investigations:
+  label: View data
+  controller: investigation
+import:
+  label: Import data
+  controller: import
