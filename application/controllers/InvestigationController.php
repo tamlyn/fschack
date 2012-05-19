@@ -3,7 +3,7 @@
 class InvestigationController extends BaseController
 {
 	public function indexAction() {
-		$this->view->investigations = array();//Model_Investigation::fetchAll();
+		$this->view->investigations = Model_Investigation::fetchAll();
 	}
 
 	public function viewAction() {
