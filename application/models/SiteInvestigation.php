@@ -3,12 +3,10 @@
 class Model_SiteInvestigation extends Model_Base{	
 	public $id;
 	protected $_tableName = 'siteInvestigations';
-
 	
-	function getMeasurmentsByType($type){
+	function getMeasurmentsByType(){
 		$q = "select * from measurements where type = ? and siteInvestigationId = ?";
-		$stmt = $this->_db->prepare($q)->execute(array($type, $this->id));
-		return $stmt->fetchAll();
+		return $this->executeQuery($q, array($type, $this->id));
 	}
 	
 	function getDepths(){

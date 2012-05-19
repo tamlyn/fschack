@@ -74,6 +74,18 @@ $front->setControllerDirectory(array(
 // ));
 $front->registerPlugin(new Zend_Controller_Plugin_ErrorHandler());
 
+//set URL rewriter to match /action
+//$router = $front->getRouter();
+//$router->addRoute('default', new Zend_Controller_Router_Route(
+//	':controller/:action/:id/*',
+//	array(
+//		'module' => 'default',
+//		'controller' => 'index',
+//		'action' => 'index',
+//		'id' => null
+//	)
+//));
+
 //add layout to view
 Zend_Layout::startMvc();
 Zend_Layout::getMvcInstance()->setLayout('layout');
