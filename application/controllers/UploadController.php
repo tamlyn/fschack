@@ -63,6 +63,12 @@ class UploadController extends BaseController {
 
 	public function importAction() {
 		$uploadedFile = $this->getUploadedFile();
+
+		if (!$uploadedFile) {
+			$this->_helper->FlashMessenger(array('error'=>'No uploaded file found'));
+			$this->_helper->redirector->gotoRoute(array('action'=>'index'));
+		}
+
 		$db = Zend_Registry::get('db');
 
 		$sheets = array();
@@ -185,17 +191,26 @@ class UploadController extends BaseController {
 					}
 				}
 
-				$this->view->imported = $allInvestigations;
+				$this->emptyTempDir();
+
+				$this->_helper->FlashMessenger(array('info'=>'All done! Imported ' . count($allInvestigations) . ' investigations'));
+				$this->_helper->redirector->gotoRoute(array('action'=>'index'));
+			}
+		}
+	}
+
+	private function emptyTempDir() {
+		if ($handle = opendir($this->tmpPath)) {
+			while (false !== ($entry = readdir($handle))) {
+				if (!in_array($entry, array('.', '..'))) {
+					unlink($this->tmpPath . $entry);
+				}
 			}
 		}
 	}
 
 	private function saveTempFile($fileInfo) {
-		if ($handle = opendir($this->tmpPath)) {
-			while (false !== ($entry = readdir($handle))) {
-				unlink($this->tmpPath . $entry);
-			}
-		}
+		$this->emptyTempDir();
 		$target = $this->tmpPath . $fileInfo['name'];
 		if (!move_uploaded_file($fileInfo['tmp_name'], $target)) {
 			$this->_helper->FlashMessenger(array('error'=>'Upload error'));

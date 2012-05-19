@@ -26,6 +26,15 @@ app.init = {
 			google.load('visualization', '1.0', {'packages':['corechart']});
 
 			google.setOnLoadCallback(app.charts.draw);
+		},
+
+		'.dtable': function(){
+			$('.dtable').dataTable({
+				bPaginate:false,
+				aaSorting:[
+					[1, 'desc']
+				]
+			});
 		}
 	}
 };
@@ -37,13 +46,7 @@ app.charts = {
 		data = new google.visualization.DataTable();
 		data.addColumn('string', 'Measurement');
 		data.addColumn('number', 'Depth');
-		data.addRows([
-			['1', 3],
-			['2', 1],
-			['3', 1],
-			['4', 1],
-			['5', 2]
-		]);
+		data.addRows(window.graphData);
 
 		// Set chart options
 		var options = {

@@ -8,6 +8,13 @@ class InvestigationController extends BaseController
 
 	public function viewAction() {
 		$this->view->investigation = Model_Investigation::fetchById($this->_request->id);
+
+		$graphData = array();
+		foreach ($this->investigation->siteInvestigations[0]->depths as $i => $measurement) {
+			$graphData["$i"] = $measurement;
+		}
+
+		$this->view->graphData = $graphData;
 	}
 
 	public function exportAction() {

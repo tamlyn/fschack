@@ -2,12 +2,10 @@
 
 class Model_Investigation extends Model_Base{	
 	protected $_tableName = 'investigations';
-	public $date;
-	
+
 	static function insert($data){
 		$investigation = new Model_Investigation($data);
 		$investigation->save();
-		$sites = array();
 		foreach($data->siteInvestigations as $siteInvestigation){
 			print_r($siteInvestigation);
 			$site = Model_Site::fetchByCentreAndTitle($investigation->centre, $siteInvestigation->site_name);
@@ -34,11 +32,13 @@ class Model_Investigation extends Model_Base{
 				}
 			}
 		}
-		
-		
+
 	}
-	
+
+	public function getSiteInvestigations() {
+		$stmt = $this->_db->prepare('SELECT * FROM siteinvestigations WHERE investigationId = :id');
+		$stmt->execute(array(':id'=>$this->id));
+		return $this->siteInvestigations = $this->objectify($stmt);
+	}
 
 }
-
- ?>

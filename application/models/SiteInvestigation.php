@@ -15,5 +15,3 @@ class Model_SiteInvestigation extends Model_Base{
 	
 
 }
-
- ?>

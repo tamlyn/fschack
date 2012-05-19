@@ -1,6 +1,9 @@
 <form method="post" action="<?php echo $this->url(); ?>" enctype="multipart/form-data">
-	<input type="file" name="file" />
-	<input type="submit" value="Upload" />
+	<fieldset>
+		<legend>Upload spreadsheet</legend>
+		<input type="file" name="file" />
+		<input type="submit" value="Upload" />
+	</fieldset>
 </form>
 
 <?php if ($this->sites) : ?>
