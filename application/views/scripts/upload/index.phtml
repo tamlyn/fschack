@@ -4,6 +4,7 @@
 </form>
 
 
+<?php if ($this->sites) : ?>
 <ul>
 	<?php foreach ($this->sites as $site) : ?>
 	<li>
@@ -18,3 +19,4 @@
 	</li>
 	<?php endforeach; ?>
 </ul>
+<?php endif; ?>

@@ -48,9 +48,9 @@ $config = new Zend_Config_Yaml(
 Zend_Registry::set('config', $config);
 
 //connect to database
-//$db = Zend_Db::factory($config->db);
-//Zend_Db_Table::setDefaultAdapter($db);
-//Zend_Registry::set('db', $db);
+$db = Zend_Db::factory($config->db);
+Zend_Db_Table::setDefaultAdapter($db);
+Zend_Registry::set('db', $db);
 
 //set up logging
 $logger = new Zend_Log();

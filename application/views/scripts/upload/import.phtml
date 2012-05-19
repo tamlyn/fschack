@@ -1,0 +1,31 @@
+<?php if ($this->todo) : ?>
+	<h3>Oh no!</h3>
+	We don't know what to do with this sheet format. Please choose a category for each row:
+	<form method="post" action="<?php echo $this->url(); ?>">
+		<fieldset>
+			<input type="hidden" name="phase" value="definition" />
+			<input type="hidden" name="hash" value="<?php echo $this->todo['hash']; ?>" />
+			<input type="hidden" name="date" value="<?php echo $this->date; ?>" />
+			<input type="hidden" name="school" value="<?php echo $this->school; ?>" />
+			<input type="hidden" name="centre" value="<?php echo $this->centre; ?>" />
+			<?php foreach ($this->sheets as $sheet) : ?>
+			<input type="hidden" name="sheets[]" value="<?php echo $sheet; ?>" />
+			<?php endforeach; ?>
+			<ul>
+				<?php foreach ($this->todo['rows'] as $index=>$row) : ?>
+				<li>
+					<select name="fields[<?php echo $index; ?>]">
+						<?php foreach ($this->fields as $field=>$label) : ?>
+						<option value="<?php echo $field; ?>" <?php if ($this->enteredFields[$index] == $field) echo 'selected'; ?>><?php echo $label; ?></option>
+						<?php endforeach; ?>
+					</select>
+					Row <?php echo $index; ?>: <?php echo '<b>' . ($row ?: '[no title]') . '</b> ' . ($this->todo['examples'][$index] ? '(e.g. ' . implode(',', $this->todo['examples'][$index]) . ')' : '[empty]'); ?>
+				</li>
+				<?php endforeach; ?>
+			</ul>
+			<input type="submit" value="Save" />
+		</fieldset>
+	</form>
+<?php else : ?>
+	All done! Imported <?php echo count($this->imported); ?> investigations
+<?php endif; ?>

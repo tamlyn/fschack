@@ -1,0 +1,31 @@
+<form method="post" action="<?php echo $this->url(array('action'=>'import')); ?>">
+	<fieldset>
+		<input type="hidden" name="phase" value="sheets" />
+		<ul>
+			<li>
+				<label for="date">Date</label>
+				<input type="text" id="date" name="date" placeholder="e.g. 01-01-2012" value="<?php echo $this->date; ?>" />
+			</li>
+			<li>
+				<label for="school">School</label>
+				<input type="text" id="school" name="school" value="<?php echo $this->school; ?>"/>
+			</li>
+			<li>
+				<label for="centre">Centre</label>
+				<input type="text" id="centre" name="centre" value="<?php echo $this->centre; ?>"/>
+			</li>
+		</ul>
+	</fieldset>
+	<fieldset>
+		<legend>Sheets to import</legend>
+		<ul>
+			<?php foreach ($this->sheets as $i=>$sheet) : ?>
+			<li>
+				<input id="sheet_<?php echo $i; ?>" name="sheets[]" type="checkbox" value="<?php echo $i; ?>" <?php if (in_array($i, $this->selectedSheets)) echo 'checked'; ?> />
+				<label for="sheet_<?php echo $i; ?>"><?php echo $sheet['name']; ?></label>
+			</li>
+			<?php endforeach; ?>
+		</ul>
+		<input type="submit" value="Go" />
+	</fieldset>
+</form>
