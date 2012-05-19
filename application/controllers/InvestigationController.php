@@ -10,8 +10,8 @@ class InvestigationController extends BaseController
 		$this->view->investigation = Model_Investigation::fetchById($this->_request->id);
 
 		$graphData = array();
-		foreach ($this->investigation->siteInvestigations[0]->depths as $i => $measurement) {
-			$graphData["$i"] = $measurement;
+		foreach ($this->view->investigation->siteInvestigations[0]->getDepths() as $i => $measurement) {
+			$graphData[] = array("$i", floatval($measurement['value']));
 		}
 
 		$this->view->graphData = $graphData;
