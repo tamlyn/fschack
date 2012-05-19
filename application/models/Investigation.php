@@ -11,8 +11,9 @@ class Model_Investigation extends Model_Base{
 			$site = Model_Site::fetchByCentreAndTitle($investigation->centre, $siteInvestigation->site_name);
 			if(!$site){
 				$site = new Model_Site();
+				$site->date = $investigation->date;
 				$site->centre = $investigation->centre;
-				$site->title = $siteInvestigation->site_name;
+				$site->schoolName = $siteInvestigation->site_name;
 				$site->save();
 			}
 			$siteInv = new Model_SiteInvestigation();
