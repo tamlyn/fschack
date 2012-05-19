@@ -63,6 +63,12 @@ class UploadController extends BaseController {
 
 	public function importAction() {
 		$uploadedFile = $this->getUploadedFile();
+
+		if (!$uploadedFile) {
+			$this->_helper->FlashMessenger(array('error'=>'No uploaded file found'));
+			$this->_helper->redirector->gotoRoute(array('action'=>'index'));
+		}
+
 		$db = Zend_Registry::get('db');
 
 		$sheets = array();
@@ -184,8 +190,10 @@ class UploadController extends BaseController {
 					}
 				}
 
-				$this->view->imported = $allInvestigations;
 				$this->emptyTempDir();
+
+				$this->_helper->FlashMessenger(array('info'=>'All done! Imported ' . count($allInvestigations) . ' investigations'));
+				$this->_helper->redirector->gotoRoute(array('action'=>'index'));
 			}
 		}
 	}
@@ -193,7 +201,9 @@ class UploadController extends BaseController {
 	private function emptyTempDir() {
 		if ($handle = opendir($this->tmpPath)) {
 			while (false !== ($entry = readdir($handle))) {
-				unlink($this->tmpPath . $entry);
+				if (!in_array($entry, array('.', '..'))) {
+					unlink($this->tmpPath . $entry);
+				}
 			}
 		}
 	}
