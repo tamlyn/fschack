@@ -17,8 +17,9 @@ class ImportController extends BaseController
 					$this->_helper->FlashMessenger(array('error'=>'Wrong file type. Must be excel (.xls)'));
 				} else {
 					try {
-						$sites = $this->readExcel($fileInfo['tmp_name']);
-						$this->view->sites = $sites;
+						$investigationData = $this->readExcel($fileInfo['tmp_name']);
+						$investigation = Model_Investigation::insert($investigationData);
+						$this->view->investigation = $investigation;
 					} catch (Exception $ex) {
 						$this->_helper->FlashMessenger(array('error'=>'Cannot read excel file: ' . $ex->getMessage()));
 					}
@@ -70,7 +71,13 @@ class ImportController extends BaseController
 				}
 			}
 		}
-		return $sites;
+		$investigation = new stdClass();
+		$investigation->date = time();
+		$investigation->schoolName = "Acland Burghley";
+		$investigation->centre = "Slapton";
+		$investigation->siteInvestigations = $sites;
+
+		return $investigation;
 	}
 }
 
