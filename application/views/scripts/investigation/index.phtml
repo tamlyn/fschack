@@ -1,0 +1,5 @@
+<ul>
+	<?php foreach ($this->investigations as $investigation): ?>
+	<li><a href="<?php echo $this->url(array()); ?>"><?php echo $investigation->name; ?></a></li>
+	<?php endforeach; ?>
+</ul>

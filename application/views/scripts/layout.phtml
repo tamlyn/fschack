@@ -6,23 +6,29 @@
 	<title><?php echo strip_tags($this->title); ?></title>
 	<?php
 	echo $this->headLink()
-		->appendStylesheet('assets/css/main.css')
+		->appendStylesheet($this->baseUrl('assets/css/main.css'))
 	?>
 </head>
 <body>
 
 <div id="wrapper">
-	<h1><?php echo $this->title; ?></h1>
-</div>
-<div id="content" class="clearfix">
-	<?php echo $this->FlashMessages(); ?>
-	<?php echo $this->layout()->content; ?>
-</div>
+	<div id="main-header">
+		<div id="nav-bar">
+			<div id="nav">
+				<?php echo $this->navigation()->menu()->setMaxDepth(1); ?>
+			</div>
+		</div>
+		<h1><?php echo $this->title; ?></h1>
+	</div>
+	<div id="content" class="clearfix">
+		<?php echo $this->FlashMessages(); ?>
+		<?php echo $this->layout()->content; ?>
+	</div>
 </div>
 <?php
 echo $this->headScript()
 		->appendFile('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js')
-		->appendFile('assets/js/main.js')
+		->appendFile($this->baseUrl('assets/js/main.js'))
 ?>
 
 </body>

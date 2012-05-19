@@ -1,26 +1,5 @@
 <?php
 
-class FetchCount {
-	public $fetched = 0;
-	public $added = 0;
-	public $type = '';
-
-	public function __construct($fetched, $added, $type='tweet') {
-		$this->type = $type;
-		$this->fetched = $fetched;
-		$this->added = $added;
-	}
-	
-	public function add($count) {
-		$this->fetched += $count->fetched;
-		$this->added += $count->added;
-	}
-	
-	public function __toString() {
-		$items = $this->type . ($this->fetched == 1 ? '' : 's');
-		return "Fetched $this->fetched $items ($this->added new)";
-	}
-}
 
 abstract class Model_Base
 {
@@ -144,7 +123,7 @@ abstract class Model_Base
 	public function fromArray($data)
 	{
 		if ($data) {
-			foreach ($data as $key => $value) {
+			foreach ((array) $data as $key => $value) {
 				if (in_array($key, $this->columnNames)) {
 					$this->{$key} = $value;
 				}
