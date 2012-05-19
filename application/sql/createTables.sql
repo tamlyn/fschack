@@ -96,6 +96,20 @@ CREATE TABLE IF NOT EXISTS `sites` (
   KEY `centre` (`centre`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `file_formats`
+--
+
+CREATE TABLE IF NOT EXISTS `file_formats` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `hash` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `fields` varchar(1000) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `hash` (`hash`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
