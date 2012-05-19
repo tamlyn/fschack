@@ -98,3 +98,24 @@ a:hover, span.link:hover {
 #nav li a:hover, #nav li.active a {
 	border-top-color: #fff;
 }
+
+.clear {
+	clear: both;
+}
+
+.clearfix:before,
+.clearfix:after {
+	content: "";
+	display: table;
+}
+
+.clearfix:after {
+	clear: both;
+	color: hsl(0, 100%, 50%)
+}
+
+
+
+#chart {
+	min-height: 200px;
+}

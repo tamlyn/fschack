@@ -34,7 +34,7 @@ app.charts = {
 	draw: function() {
 
 		// Create the data table.
-		var data = new google.visualization.DataTable();
+		data = new google.visualization.DataTable();
 		data.addColumn('string', 'Measurement');
 		data.addColumn('number', 'Depth');
 		data.addRows([
@@ -47,9 +47,15 @@ app.charts = {
 
 		// Set chart options
 		var options = {
-			'title':'Chart 1',
-			'width':400,
-			'height':300
+			hAxis:{
+				title: 'Measurements'
+			},
+			vAxis: {
+				title: 'Depth (m)'
+			},
+			legend: {
+				position: 'none'
+			}
 		};
 
 		// Instantiate and draw our chart, passing in some options.
