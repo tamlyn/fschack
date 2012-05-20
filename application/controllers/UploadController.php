@@ -46,7 +46,7 @@ class UploadController extends BaseController {
 				$fileInfo = $_FILES['file'];
 				if ($fileInfo['error']) {
 					$this->_helper->FlashMessenger(array('error'=>$this->uploadErrors[$fileInfo['error']]));
-				} else if ($fileInfo['type'] != 'application/vnd.ms-excel') {
+				} else if (substr($fileInfo['name'], -4) != '.xls') {
 					$this->_helper->FlashMessenger(array('error'=>'Wrong file type. Must be excel (.xls)'));
 				} else {
 					try {
@@ -184,14 +184,16 @@ class UploadController extends BaseController {
 					foreach ($sheetData['rows'] as $i=>$row) {
 						$toCompare = strtolower($row);
 						$guess = null;
-						if (strpos($toCompare, 'mean') === false && strpos($toCompare, 'mode') === false) {
+						if (strpos($toCompare, 'mean') === false && strpos($toCompare, 'mode') === false && strpos($toCompare, 'average') === false) {
 							if (strpos($toCompare, 'depth') !== false) {
 								$guess = 'depth';
+							} else if (strpos($toCompare, 'width') !== false) {
+								$guess = 'water_width';
 							} else if (strpos($toCompare, 'wetted') !== false) {
 								$guess = 'wetted_perimeter';
 							} else if (strpos($toCompare, 'gradient') !== false) {
 								$guess = (strpos($toCompare, 'm') === false ? 'gradient_degrees' : 'gradient_diff');
-							} else if ((strpos($toCompare, 'flowrate') !== false || strpos($toCompare, 'velocity') !== false) && strpos($toCompare, 'revs') === false) {
+							} else if ((strpos($toCompare, 'flowrate') !== false || strpos($toCompare, 'flow rate') !== false || strpos($toCompare, 'velocity') !== false) && strpos($toCompare, 'revs') === false) {
 								$guess = 'flowrate';
 							} else if (strpos($toCompare, 'bedload') !== false) {
 								$guess = 'bedload_length';
