@@ -22,6 +22,44 @@ class InvestigationController extends BaseController
 		$this->view->title = 'Investigation Overview';
 		$investigation = Model_Investigation::fetchById($this->_request->id);
 		$this->validateData($investigation);
+		$series1 = array(
+			'title' => $investigation->startDate,
+			'columns' => array(
+				array('type'=>'string', 'label'=>'Site'),
+				array('type'=>'number', 'label'=>'Mean depth')
+			),
+			'points' => array()
+		);
+		foreach ($investigation->siteInvestigations as $siteInvestigation) {
+			$series1['points'][] = array(
+				$siteInvestigation->site->title,
+				$siteInvestigation->meanDepth
+			);
+		}
+
+		$this->view->graphData = array(
+			'options' => array(
+				'hAxis' => array(
+					'title' => 'Sites',
+//					'minValue'=>-$margin,
+//					'maxValue'=>$maxWidth
+				),
+				'vAxes' => array(
+					array(
+						'title' => 'Mean depth (m)',
+						'direction' => -1
+					)
+				),
+				'legend' => array(
+					'position' => 'none'
+				),
+				'animation' => array(
+					'duration' => 1000,
+					'easing' => 'out'
+				)
+			),
+			'series' => array($series1)
+		);
 		$this->view->investigation = $investigation;
 	}
 
@@ -50,7 +88,6 @@ class InvestigationController extends BaseController
 		}
 
 		$this->view->graphData = array(
-			'type' => 'depth',
 			'options' => array(
 				'hAxis' => array(
 					'title'=>'River width (m)',
@@ -84,7 +121,7 @@ class InvestigationController extends BaseController
 	protected function makeDepthSeries($siteInvestigation, $maxWidth) {
 		$margin = ($maxWidth - $siteInvestigation->width->value) / 2;
 		$series = array(
-			'title' => $siteInvestigation->site->name . ' ' . $siteInvestigation->date,
+			'title' => $siteInvestigation->site->title . ' ' . $siteInvestigation->investigation->startDate,
 			'columns' => array(
 				array('type' => 'number', 'label' => 'Width'),
 				array('type' => 'number', 'label' => 'Depth'),

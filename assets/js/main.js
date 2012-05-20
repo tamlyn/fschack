@@ -58,40 +58,47 @@ app.init = {
 	}
 };
 
+app.setTitle = function (title) {
+	$('#main-header h1').text(title);
+};
+
 app.charts = {
 	chart: null,
-	currentSite: 0,
+	currentIndex: 0,
+
 	init: function() {
 		app.charts.chart = new google.visualization.LineChart(document.getElementById('chart'));
-		app.charts.drawDepthSeries(app.charts.currentSite);
-
-		var updateButtonState = function() {
-			if (app.charts.currentSite == (window.graphData.series.length - 1)) {
-				$('input.next').attr('disabled', 'disabled');
-			} else {
-				$('input.next').removeAttr('disabled');
-			}
-			if (app.charts.currentSite == 0) {
-				$('input.prev').attr('disabled', 'disabled');
-			} else {
-				$('input.prev').removeAttr('disabled');
-			}
-		};
+		app.charts.drawDepthSeries(app.charts.currentIndex);
 
 		$('input.next').click(function(){
-			app.charts.drawDepthSeries(++app.charts.currentSite);
-			updateButtonState();
+			app.charts.drawDepthSeries(++app.charts.currentIndex);
+			app.charts.updateButtonState();
 		});
 		$('input.prev').click(function () {
-			app.charts.drawDepthSeries(--app.charts.currentSite);
-			updateButtonState();
+			app.charts.drawDepthSeries(--app.charts.currentIndex);
+			app.charts.updateButtonState();
 		});
 
-		updateButtonState();
+		app.charts.updateButtonState();
+	},
+
+	updateButtonState: function () {
+		if (app.charts.currentIndex == (window.graphData.series.length - 1)) {
+			$('input.next').attr('disabled', 'disabled');
+		} else {
+			$('input.next').removeAttr('disabled');
+		}
+		if (app.charts.currentIndex == 0) {
+			$('input.prev').attr('disabled', 'disabled');
+		} else {
+			$('input.prev').removeAttr('disabled');
+		}
 	},
 
 	drawDepthSeries: function(index) {
 		var series = window.graphData.series[index];
+
+		app.setTitle(series.title);
 		var data = new google.visualization.DataTable();
 		for (var i in series.columns) {
 			data.addColumn(series.columns[i].type, series.columns[i].label);
