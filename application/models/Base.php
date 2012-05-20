@@ -221,4 +221,50 @@ abstract class Model_Base
 		$date->setTimezone(new DateTimeZone(date_default_timezone_get()));
 		return $date->format('Y-m-d H:i:s');
 	}
+
+
+	public function getMax($type){
+		$siteInvestigations = $this->getSiteInvestigations();
+		$fname = str_replace(' ','', ucwords(implode(' ', explode('_', $type))));
+		$maxProperty = "max".$fname;
+		$minProperty = "min".$fname;
+		$this->$maxProperty =-99999999;
+		$this->$minProperty =999999999;
+		foreach($siteInvestigations as $si){
+			foreach($si->getMeasurementsByType($type) as $value){
+				if(($value->value > $this->$maxProperty) && is_numeric($value->value)){
+					$this->$maxProperty = $value->value;
+				}
+				if(($value->value < $this->$minProperty) && is_numeric($value->value)){
+					$this->$minProperty = $value->value;
+				}
+
+			}
+		}
+		return $this->$maxProperty;
+	}
+
+	public function getMin($type){
+		$maxFunctionName = "max".str_replace(' ','', ucwords(implode(' ', explode('_', $type))));
+		$minPropertyName = "min".str_replace(' ','', ucwords(implode(' ', explode('_', $type))));
+		$this->$maxFunctionName();
+		return $this->$minPropertyName;
+	}
+
+
+	public function getMinDepth(){
+		return (float)$this->getMin('getMaxDepth', 'minDepth');
+	}
+
+	public function getMaxDepth(){
+		return (float)$this->getMax('depth');
+	}
+
+	public function getMinWaterWidth(){
+		return (float)$this->getMin('water_width');
+	}
+
+	public function getMaxWaterWidth(){
+		return (float)$this->getMax('water_width');
+	}
 }

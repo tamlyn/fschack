@@ -23,7 +23,7 @@ class SiteController extends BaseController
 	}
 
 
-	public function sitesAction() {
+	public function investigationsAction() {
 		$site = Model_Site::fetchById($this->_request->id);
 
 		$series = array();
@@ -56,12 +56,12 @@ class SiteController extends BaseController
 		);
 		$this->view->meanFlowrate = $siteInvestigation->getMeanFlowrate();
 		$this->view->meanDepth = $siteInvestigation->getMeanDepth();
-		$this->view->maxDepth = $investigation->maxDepth;
-		$this->view->minDepth = $investigation->minDepth;
-		$this->view->maxWaterWidth = $investigation->maxWaterWidth;
-		$this->view->minWaterWidth = $investigation->minWaterWidth;
+		$this->view->maxDepth = $site->maxDepth;
+		$this->view->minDepth = $site->minDepth;
+		$this->view->maxWaterWidth = $site->maxWaterWidth;
+		$this->view->minWaterWidth = $site->minWaterWidth;
 
-		$this->view->investigation = $investigation;
+		$this->view->site = $site;
 	}
 
 
