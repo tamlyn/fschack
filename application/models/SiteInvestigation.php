@@ -11,7 +11,10 @@ class Model_SiteInvestigation extends Model_Base{
 	}
 	
 	function getDepths(){
-		return $this->getMeasurementsByType('depth');
+		$depths = $this->getMeasurementsByType('depth');
+		array_push($depths, array('value' => 0));
+		array_unshift($depths, array('value' => 0));
+		return $depths;
 	}
 	
 

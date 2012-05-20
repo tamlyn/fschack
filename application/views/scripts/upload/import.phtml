@@ -18,7 +18,7 @@
 						<option value="<?php echo $field; ?>" <?php if ($this->enteredFields[$index] == $field) echo 'selected'; ?>><?php echo $label; ?></option>
 						<?php endforeach; ?>
 					</select>
-					Row <?php echo $index; ?>: <?php echo '<b>' . ($row ?: '[no title]') . '</b> ' . ($this->todo['examples'][$index] ? '(e.g. ' . implode(',', $this->todo['examples'][$index]) . ')' : '[empty]'); ?>
+					Row <?php echo $index; ?>: <?php echo '<b>' . ($row ?: '[no title]') . '</b> ' . ($this->todo['examples'][$index] ? '(e.g. ' . implode(', ', $this->todo['examples'][$index]) . ')' : '[empty]'); ?>
 				</div>
 				<?php endforeach; ?>
 			<div class="buttonHolder">

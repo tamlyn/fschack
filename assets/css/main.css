@@ -127,6 +127,10 @@ a:hover, span.link:hover {
 
 /* Datatables */
 
+table {
+	border-collapse: collapse;
+}
+
 table.dataTable th {
 	text-align: left;
 }
@@ -145,6 +149,11 @@ table.dataTable tr.selected td {
 
 table.dataTable tr.selected td.sorting_1 {
 	background-color: #d6e9c6;
+}
+
+.dataTables_info {
+	color: #888;
+	padding: 5px 10px;
 }
 
 .messages {
