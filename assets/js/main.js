@@ -19,7 +19,22 @@ app.init = {
 			if ($element.length) app.init.selectors[selector]($element);
 		}
 
-	},
+        /* Remove/delete link autoconfirm */
+
+        $('a.autoConfirm').live('click', function(e) {
+            e.preventDefault();
+            $(this).replaceWith('<form method="post" action="'+$(this).attr('href')+'" class="'+$(this).attr('class')+'">' +
+                'Are you sure? <input type="submit" value="'+$(this).text()+'" title="' + $(this).attr('title') + '"> <a href="">Cancel</a></form>');
+        });
+
+        $('form.autoConfirm a').live('click', function(e) {
+            e.preventDefault();
+            var $form = $(this).closest('form');
+            $form.replaceWith('<a href="'+$form.attr('action')+'" class="'+$form.attr('class')+'" title="' + $form.find('input').attr('title') + '">' +
+                $form.find('input').attr('value') + '</a>');
+        });
+
+    },
 
 	//selector-based init functions, called from bootstrap
 	selectors: {

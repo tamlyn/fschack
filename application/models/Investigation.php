@@ -5,6 +5,7 @@ class Model_Investigation extends Model_Base{
 
 	static function insert($data){
 		$investigation = new Model_Investigation();
+		$investigation->name = $data->name;
 		$investigation->startDate = date('Y-m-d', strtotime($data->date));
 		$investigation->schoolName = $data->school;
 		$investigation->centre = $data->centre;
@@ -86,6 +87,11 @@ class Model_Investigation extends Model_Base{
 		return $this->getMax('water_width');
 	}
 
-
+	public function delete() {
+		foreach ($this->getSiteInvestigations() as $siteInvestigation) {
+			$siteInvestigation->delete();
+		}
+		parent::delete();
+	}
 
 }

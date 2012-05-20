@@ -6,6 +6,17 @@ class InvestigationController extends BaseController
 		$this->view->investigations = Model_Investigation::fetchAll();
 	}
 
+	public function deleteAction() {
+		if ($this->_request->isPost()) {
+			$investigation = Model_Investigation::fetchById($this->_request->id);
+			if ($investigation) {
+				$investigation->delete();
+				$this->_helper->FlashMessenger(array('info'=>'Investigation deleted'));
+			}
+		}
+		$this->_helper->redirector->gotoRoute(array('action'=>'index'));
+	}
+
 	public function overviewAction() {
 		$investigation = Model_Investigation::fetchById($this->_request->id);
 		$siteData = array();

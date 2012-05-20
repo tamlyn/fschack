@@ -2,7 +2,11 @@
 
 class Model_SiteInvestigation extends Model_Base{	
 	protected $_tableName = 'siteinvestigations';
-	
+
+	function getMeasurements() {
+		return Model_Measurement::fetchAll('siteInvestigationId = :id', array(':id'=>$this->id));
+	}
+
 	function getMeasurementsByType($type){
 		return Model_Measurement::fetchAll('type = :type and siteInvestigationId = :id', array(':type'=>$type, ':id'=>$this->id));
 	}
@@ -53,5 +57,11 @@ class Model_SiteInvestigation extends Model_Base{
 		return array_shift($this->getMeasurementsByType('gradient_degrees'));
 	}
 
+	public function delete() {
+		foreach ($this->getMeasurements() as $measurement) {
+			$measurement->delete();
+		}
+		parent::delete();
+	}
 
 }

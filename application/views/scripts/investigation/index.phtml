@@ -2,6 +2,7 @@
 	<thead>
 		<tr>
 			<th>Date</th>
+			<th>Name</th>
 			<th>Centre</th>
 			<th>School</th>
 			<th></th>
@@ -11,10 +12,12 @@
 	<?php foreach ($this->investigations as $investigation): ?>
 		<tr>
 			<td><?php echo $investigation->startDate; ?></td>
+			<td><?php echo $investigation->name; ?></td>
 			<td><?php echo $investigation->centre; ?></td>
 			<td><?php echo $investigation->schoolName; ?></td>
 			<td>
 				<a href="<?php echo $this->url(array('action' => 'sites', 'id' => $investigation->id)); ?>">View</a> |
+				<a href="<?php echo $this->url(array('action' => 'delete', 'id' => $investigation->id)); ?>" class="autoConfirm">Delete</a> |
 				<a href="<?php echo $this->url(array('action' => 'export', 'id' => $investigation->id)); ?>">Export as CSV</a>
 			</td>
 		</tr>

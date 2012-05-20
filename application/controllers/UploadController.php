@@ -84,12 +84,10 @@ class UploadController extends BaseController {
 		$db = Zend_Registry::get('db');
 
 		$sheets = array();
-		if ($uploadedFile) {
-			$data = new Spreadsheet_Excel_Reader();
-			$data->read($uploadedFile);
-			foreach ($data->boundsheets as $sheet) {
-				$sheets[] = $sheet;
-			}
+		$spreadsheet = new Spreadsheet_Excel_Reader();
+		$spreadsheet->read($uploadedFile);
+		foreach ($spreadsheet->boundsheets as $sheet) {
+			$sheets[] = $sheet;
 		}
 		$this->view->sheets = $sheets;
 		$this->view->date = $this->_request->date;
@@ -139,7 +137,7 @@ class UploadController extends BaseController {
 						$toSave[$field][] = $row;
 					}
 				}
-				if (!$toSave['sites']) {
+				if (count($toSave['sites']) != 1) {
 					$this->view->enteredFields = $this->_request->fields;
 					$this->_helper->FlashMessenger(array('error'=>'One of the rows must be for site names'));
 				} else {
@@ -149,8 +147,6 @@ class UploadController extends BaseController {
 			}
 
 			// fetch each sheet signature
-			$spreadsheet = new Spreadsheet_Excel_Reader();
-			$spreadsheet->read($uploadedFile);
 			$hashes = array();
 			foreach ($this->_request->sheets as $sheetIndex) {
 				$sheet = $spreadsheet->sheets[$sheetIndex];
@@ -259,6 +255,7 @@ class UploadController extends BaseController {
 		$sitesRow = $fields['sites'][0];
 		unset($fields['sites']);
 
+		$sheetName = $spreadsheet->boundsheets[$sheetIndex]['name'];
 		$sheet = $spreadsheet->sheets[$sheetIndex];
 
 		$sites = array();
@@ -276,7 +273,7 @@ class UploadController extends BaseController {
 				}
 			}
 		}
-		return (object)array('siteInvestigations'=>array_values($sites));
+		return (object)array('name'=>$sheetName, 'siteInvestigations'=>array_values($sites));
 	}
 }
 
