@@ -59,11 +59,24 @@ app.init = {
 };
 
 app.charts = {
+	chart: null,
+	currentSite: 0,
 	init: function() {
-		var data = app.charts.drawers[window.graphData.type](window.graphData.series);
+		app.charts.chart = new google.visualization.LineChart(document.getElementById('chart'));
+		app.charts.drawDepthSeries(app.charts.currentSite);
+		$('input.next').click(function(){
+			app.charts.currentSite = (app.charts.currentSite + 1) % window.graphData.series.length;
+			app.charts.drawDepthSeries(app.charts.currentSite);
+		});
+		$('input.prev').click(function () {
+			app.charts.currentSite = (app.charts.currentSite - 1) % window.graphData.series.length;
+			app.charts.drawDepthSeries(app.charts.currentSite);
+		});
+	},
 
-		var chart = new google.visualization.LineChart(document.getElementById('chart'));
-		chart.draw(data, window.graphData.options);
+	drawDepthSeries: function(index) {
+		var data = app.charts.drawers[window.graphData.type](window.graphData.series[index]);
+		app.charts.chart.draw(data, window.graphData.options);
 	},
 
 	drawers: {

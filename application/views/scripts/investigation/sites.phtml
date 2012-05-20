@@ -2,11 +2,19 @@
 <script type="text/javascript">
 	var graphData = <?php echo json_encode($this->graphData); ?>;
 </script>
+<div id="chart"></div>
+
+<div class="uniForm">
+	<div class="buttonHolder">
+		<input type="button" value="Previous site" class="secondaryAction prev">
+		<input type="button" value="Next site" class="primaryAction next">
+	</div>
+</div>
+
 <p>Investigation Max Depth:	<?php print $this->maxDepth; ?></p>
 <p>Investigation Min Depth: <?php print $this->minDepth; ?></p>
 <p>Investigation Max Width:	<?php print $this->maxWaterWidth; ?></p>
 <p>Investigation Min Width: <?php print $this->minWaterWidth; ?></p>
-<div id="chart"></div>
 
 
 	<div clas='siteInvestigationInfo'>

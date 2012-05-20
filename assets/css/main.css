@@ -23,7 +23,7 @@ h3 {
 }
 
 a:link, a:visited, span.link {
-	color: #4083a9;
+	color: #A6AA14;
 	outline: none;
 	text-decoration: none;
 	cursor: pointer;
@@ -114,7 +114,7 @@ a:hover, span.link:hover {
 /* Charts */
 
 #chart {
-	min-height: 200px;
+	height: 200px;
 }
 
 /* Datatables */

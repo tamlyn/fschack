@@ -72,19 +72,19 @@ class Model_Investigation extends Model_Base{
 
 
 	public function getMinDepth(){
-		return $this->getMin('getMaxDepth', 'minDepth');
+		return (float)$this->getMin('getMaxDepth', 'minDepth');
 	}
 
 	public function getMaxDepth(){
-		return $this->getMax('depth');
+		return (float)$this->getMax('depth');
 	}
 
 	public function getMinWaterWidth(){
-		return $this->getMin('water_width');
+		return (float)$this->getMin('water_width');
 	}
 
 	public function getMaxWaterWidth(){
-		return $this->getMax('water_width');
+		return (float)$this->getMax('water_width');
 	}
 
 	public function delete() {
