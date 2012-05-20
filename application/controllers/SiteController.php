@@ -61,10 +61,14 @@ class SiteController extends BaseController
 					),
 				),
 				'series' => array(
-					1 => array(
-						'targetAxisIndex' => 1
+					array(
+						'color' => '#CD3667'
 					),
-					2 => array(
+					array(
+						'targetAxisIndex' => 1,
+						'color' => '#47918E'
+					),
+					array(
 						'targetAxisIndex' => 2
 					)
 				),
