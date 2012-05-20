@@ -1,7 +1,7 @@
-<h2>Centre: <?php echo $this->investigation->centre; ?></h2>
+<h2>Site: <?php echo $this->site->centre; ?> - <?php print $this->site->title; ?></h2>
 
 <h3>Site investigations</h3>
-<a href="<?php echo $this->url(array('action'=>'sites')); ?>">View sites</a>
+<a href="<?php echo $this->url(array('action'=>'investigation')); ?>">View investigations</a>
 
 
 <table class="dtable">
@@ -16,7 +16,7 @@
 	</tr>
 	</thead>
 	<tbody>
-	<?php foreach ($this->investigation->siteInvestigations as $siteInvestigation) : ?>
+	<?php foreach ($this->site->siteInvestigations as $siteInvestigation) : ?>
 	<tr>
 		<td><?php echo $siteInvestigation->siteOrder+1; ?></td>
 		<td><?php echo $siteInvestigation->getSite()->title; ?></td>
