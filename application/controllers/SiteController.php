@@ -19,6 +19,65 @@ class SiteController extends BaseController
 
 	public function overviewAction() {
 		$site = Model_Site::fetchById($this->_request->id);
+		$this->view->title = $site->centre . ' - '. $site->title;
+
+		$series1 = array(
+			'title' => $this->view->title,
+			'columns' => array(
+				array('type' => 'string', 'label' => 'Site'),
+				array('type' => 'number', 'label' => 'Mean depth'),
+//				array('type' => 'number', 'label' => 'Mean flowrate'),
+				array('type' => 'number', 'label' => 'Discharge')
+			),
+			'points' => array()
+		);
+		foreach ($site->siteInvestigations as $siteInvestigation) {
+			$series1['points'][] = array(
+				$site->title,
+				$siteInvestigation->meanDepth,
+//				$siteInvestigation->meanFlowrate,
+				$siteInvestigation->discharge
+			);
+		}
+
+		$this->view->graphData = array(
+			'options' => array(
+				'hAxis' => array(
+					'title' => 'Sites',
+//					'minValue'=>-$margin,
+//					'maxValue'=>$maxWidth
+				),
+				'vAxes' => array(
+					array(
+						'title' => 'Mean depth (m)',
+//						'direction'=>-1
+					),
+//					array(
+//						'title' => 'Mean flowrate (m/s)'
+//					),
+					array(
+						'title' => 'Discharge (m3/s)'
+					),
+				),
+				'series' => array(
+					1 => array(
+						'targetAxisIndex' => 1
+					),
+					2 => array(
+						'targetAxisIndex' => 2
+					)
+				),
+				'legend' => array(
+//					'position' => 'none'
+				),
+				'animation' => array(
+					'duration' => 1000,
+					'easing' => 'out'
+				)
+			),
+			'series' => array($series1)
+		);
+
 		$this->view->site = $site;
 	}
 

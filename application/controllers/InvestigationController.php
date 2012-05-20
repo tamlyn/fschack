@@ -27,7 +27,8 @@ class InvestigationController extends BaseController
 			'columns' => array(
 				array('type'=>'string', 'label'=>'Site'),
 				array('type' => 'number', 'label' => 'Mean depth'),
-				array('type' => 'number', 'label' => 'Mean flowrate')
+//				array('type' => 'number', 'label' => 'Mean flowrate'),
+				array('type' => 'number', 'label' => 'Discharge')
 			),
 			'points' => array()
 		);
@@ -35,7 +36,8 @@ class InvestigationController extends BaseController
 			$series1['points'][] = array(
 				$siteInvestigation->site->title,
 				$siteInvestigation->meanDepth,
-				$siteInvestigation->meanFlowrate,
+//				$siteInvestigation->meanFlowrate,
+				$siteInvestigation->discharge
 			);
 		}
 
@@ -51,13 +53,19 @@ class InvestigationController extends BaseController
 						'title' => 'Mean depth (m)',
 //						'direction'=>-1
 					),
+//					array(
+//						'title' => 'Mean flowrate (m/s)'
+//					),
 					array(
-						'title' => 'Mean flowrate (m/s)'
-					)
+						'title' => 'Discharge (m3/s)'
+					),
 				),
 				'series' => array(
 					1 => array(
 						'targetAxisIndex' => 1
+					),
+					2 => array(
+						'targetAxisIndex' => 2
 					)
 				),
 				'legend' => array(
