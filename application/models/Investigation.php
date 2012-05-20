@@ -23,7 +23,7 @@ class Model_Investigation extends Model_Base{
 			$siteInv->save();
 
 			foreach($siteInvestigation->data as $type => $values){
-//				$q = "INSERT INTO measurements (siteInvestigationId, type, investigationSeriesIndex, value) VALUES (?,?,?,?)";
+//				$$this->investigation->siteInvestigations[0]->depthsq = "INSERT INTO measurements (siteInvestigationId, type, investigationSeriesIndex, value) VALUES (?,?,?,?)";
 				foreach($values as $i => $value){
 					$measurement = new Model_Measurement();
 					$measurement->siteInvestigationId = $siteInv->id;

@@ -127,6 +127,10 @@ a:hover, span.link:hover {
 
 /* Datatables */
 
+table {
+	border-collapse: collapse;
+}
+
 table.dataTable th {
 	text-align: left;
 }
@@ -147,6 +151,11 @@ table.dataTable tr.selected td.sorting_1 {
 	background-color: #d6e9c6;
 }
 
+.dataTables_info {
+	color: #888;
+	padding: 5px 10px;
+}
+
 .messages {
 	clear: left;
 	list-style: none;
@@ -165,4 +174,34 @@ table.dataTable tr.selected td.sorting_1 {
 	background-color: #fdd;
 	border-color: #e77;
 	background-image: url(../img/exclamation.png);
+}
+
+/* Forms */
+
+fieldset {
+	padding: 0;
+	border: 0;
+	margin: 0;
+}
+
+fieldset ol, fieldset ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+fieldset ul li {
+	padding: 2px 0px 12px 0px;
+}
+
+.ctrlHolder > label, .ctrlHolder > .label {
+	padding: 0;
+	margin: 0 0.5em 0 0;
+	display: block;
+	float: left;
+	width: 8.8em;
+}
+
+fieldset input, fieldset select, fieldset textarea {
+	margin: 0px;
 }

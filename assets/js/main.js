@@ -28,12 +28,9 @@ app.init = {
 			google.setOnLoadCallback(app.charts.draw);
 		},
 
-		'.dtable': function(){
+		'.dtable': function() {
 			$('.dtable').dataTable({
-				bPaginate:false,
-				aaSorting:[
-					[1, 'desc']
-				]
+				bPaginate:false
 			});
 		}
 	}
@@ -54,7 +51,8 @@ app.charts = {
 				title: 'Measurements'
 			},
 			vAxis: {
-				title: 'Depth (m)'
+				title: 'Depth (m)',
+				direction: -1
 			},
 			legend: {
 				position: 'none'
