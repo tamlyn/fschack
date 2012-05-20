@@ -11,7 +11,7 @@ class InvestigationController extends BaseController
 
 		$graphData = array();
 		foreach ($this->view->investigation->siteInvestigations[0]->getDepths() as $i => $measurement) {
-			$graphData[] = array("$i", floatval($measurement['value']));
+			$graphData[] = array("$i", floatval($measurement->value));
 		}
 
 		$this->view->graphData = $graphData;

@@ -15,24 +15,31 @@ app.init = {
 	bootstrap: function() {
 		//run conditional init functions if selector exists on page
 		for (var selector in app.init.selectors) {
-			if ($(selector).length) app.init.selectors[selector]();
+            var $element = $(selector);
+			if ($element.length) app.init.selectors[selector]($element);
 		}
 
 	},
 
 	//selector-based init functions, called from bootstrap
 	selectors: {
-		'#chart': function() {
+		'#chart': function($element) {
 			google.load('visualization', '1.0', {'packages':['corechart']});
 
 			google.setOnLoadCallback(app.charts.draw);
 		},
 
-		'.dtable': function() {
-			$('.dtable').dataTable({
+		'.dtable': function($element) {
+			$element.dataTable({
 				bPaginate:false
 			});
-		}
+		},
+
+        'input#date': function($element) {
+            $element.datepicker({
+                dateFormat: 'dd-mm-yy'
+            });
+        }
 	}
 };
 

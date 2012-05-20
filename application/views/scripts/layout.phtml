@@ -7,6 +7,7 @@
 	<?php
 	echo $this->headLink()
 			->appendStylesheet($this->baseUrl('assets/lib/datatables/media/css/jquery.dataTables.css'))
+			->appendStylesheet($this->baseUrl('assets/lib/jquery/smoothness/jquery-ui-1.8.17.custom.css'))
 			->appendStylesheet($this->baseUrl('assets/css/uni-form.css'))
 			->appendStylesheet($this->baseUrl('assets/css/main.css'))
 	?>
@@ -31,6 +32,7 @@
 echo $this->headScript()
 		->appendFile('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js')
 		->appendFile($this->baseUrl('assets/lib/datatables/media/js/jquery.dataTables.js'))
+		->appendFile($this->baseUrl('assets/lib/jquery/jquery-ui-1.8.17.custom.min.js'))
 		->appendFile($this->baseUrl('assets/js/main.js'))
 ?>
 

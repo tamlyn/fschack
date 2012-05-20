@@ -1,6 +1,6 @@
 <?php
 
-require_once 'lib/Excel/reader.php';
+require_once 'assets/lib/excel/Excel/reader.php';
 
 class UploadController extends BaseController {
 
@@ -22,6 +22,17 @@ class UploadController extends BaseController {
 			'roundness'        => 'Roundness'
 		);
 
+		$this->uploadErrors = array(
+			UPLOAD_ERR_OK         => "No errors",
+			UPLOAD_ERR_INI_SIZE   => "Larger than upload_max_filesize",
+			UPLOAD_ERR_FORM_SIZE  => "Larger than form MAX_FILE_SIZE",
+			UPLOAD_ERR_PARTIAL    => "Partial upload",
+			UPLOAD_ERR_NO_FILE    => "No file chosen",
+			UPLOAD_ERR_NO_TMP_DIR => "No temporary directory",
+			UPLOAD_ERR_CANT_WRITE => "Can't write to disk",
+			UPLOAD_ERR_EXTENSION  => "File upload stopped by extension"
+//			UPLOAD_ERR_EMPTY      => "File is empty"
+		);
 		parent::init();
 	}
 
@@ -33,21 +44,19 @@ class UploadController extends BaseController {
 			} else {
 				$fileInfo = $_FILES['file'];
 				if ($fileInfo['error']) {
-					$this->_helper->FlashMessenger(array('error'=>$fileInfo['error']));
+					$this->_helper->FlashMessenger(array('error'=>$this->uploadErrors[$fileInfo['error']]));
 				} else if ($fileInfo['type'] != 'application/vnd.ms-excel') {
 					$this->_helper->FlashMessenger(array('error'=>'Wrong file type. Must be excel (.xls)'));
 				} else {
 					try {
 						$this->saveTempFile($fileInfo);
 						$this->_helper->redirector->gotoRoute(array('action'=>'import'));
-//						$sites = $this->readExcel($fileInfo['tmp_name']);
-//						$this->view->sites = $sites;
 					} catch (Exception $ex) {
 						$this->_helper->FlashMessenger(array('error'=>'Cannot read excel file: ' . $ex->getMessage()));
 					}
 				}
 			}
-//			$this->_helper->redirector->gotoRoute(array('action'=>'index'));
+			$this->_helper->redirector->gotoRoute(array('action'=>'index'));
 		}
 	}
 
@@ -92,8 +101,8 @@ class UploadController extends BaseController {
 		} else {
 			// tried once, but insufficient data input
 			$errors = array();
-			if (!$this->view->date) {
-				$errors[] = 'Please enter a date';
+			if (!$this->view->date || !preg_match('/\d{2}-\d{2}-\d{4}/', $this->view->date)) {
+				$errors[] = 'Please enter a valid date';
 			}
 			if (!$this->view->school) {
 				$errors[] = 'Please enter a school';
