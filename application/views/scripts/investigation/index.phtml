@@ -16,7 +16,7 @@
 			<td><?php echo $investigation->centre; ?></td>
 			<td><?php echo $investigation->schoolName; ?></td>
 			<td>
-				<a href="<?php echo $this->url(array('action' => 'sites', 'id' => $investigation->id)); ?>">View</a> |
+				<a href="<?php echo $this->url(array('action' => 'overview', 'id' => $investigation->id)); ?>">View</a> |
 				<a href="<?php echo $this->url(array('action' => 'delete', 'id' => $investigation->id)); ?>" class="autoConfirm">Delete</a> |
 				<a href="<?php echo $this->url(array('action' => 'export', 'id' => $investigation->id)); ?>">Export as CSV</a>
 			</td>

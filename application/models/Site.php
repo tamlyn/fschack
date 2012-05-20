@@ -1,7 +1,6 @@
 <?php  
 
 class Model_Site extends Model_Base{	
-	public $id;
 	protected $_tableName = 'sites';
 
 	public function save()
@@ -9,7 +8,6 @@ class Model_Site extends Model_Base{
 		parent::save();
 		$q = "insert into sitealias (site_id, alias, centre) VALUES (?, ?, ?)";
 		$stmt = $this->_db->prepare($q)->execute(array($this->id, $this->title, $this->centre));
-
 	}
 
 	static function fetchByCentreAndTitle($centre, $title){

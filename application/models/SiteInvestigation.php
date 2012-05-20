@@ -21,11 +21,10 @@ class Model_SiteInvestigation extends Model_Base{
 		}
 	}
 
-	function getSite(){
-		return Model_Site::fetchById($this->siteId);
+	public function getSite() {
+		$this->site = Model_Site::fetchById($this->siteId);
+		return $this->site;
 	}
-
-
 
 	function getDepths(){
 		$this->depths = $this->getMeasurementsByType('depth');
@@ -52,6 +51,13 @@ class Model_SiteInvestigation extends Model_Base{
 	function getMeanBedloadLength(){
 		return $this->getMeanMeasurement('bedload_length');
 	}
+	function getRoundesses(){
+		return $this->getMeasurementsByType('roundness');
+	}
+
+	function getMeanRoundess(){
+		return $this->getMeanMeasurement('roundness');
+	}
 	function getWidth(){
 		return array_shift($this->getMeasurementsByType('water_width'));
 	}
@@ -72,7 +78,7 @@ class Model_SiteInvestigation extends Model_Base{
 	}
 
 	function getHydraulicRadius(){
-		return $this->csa / $this->wettedPerimeter;
+		return $this->csa / $this->wettedPerimeter->value;
 	}
 
 	public function delete() {

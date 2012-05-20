@@ -1,0 +1,31 @@
+<h2>Centre: <?php echo $this->investigation->centre; ?></h2>
+
+<h3>Site investigations</h3>
+<a href="<?php echo $this->url(array('action'=>'sites')); ?>">View sites</a>
+<table class="dtable">
+	<thead>
+	<tr>
+		<th>Position</th>
+		<th>Name</th>
+		<th>Width</th>
+		<th>Mean depth</th>
+		<th>Mean flow rate</th>
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+	<?php foreach ($this->investigation->siteInvestigations as $siteInvestigation) : ?>
+	<tr>
+		<td><?php echo $siteInvestigation->siteOrder+1; ?></td>
+		<td><?php echo $siteInvestigation->getSite()->title; ?></td>
+		<td><?php echo $siteInvestigation->getWidth()->value; ?></td>
+		<td><?php echo round($siteInvestigation->getMeanDepth(), 2); ?></td>
+		<td><?php echo round($siteInvestigation->getMeanFlowRate(), 2); ?></td>
+		<td>
+			<a href="<?php echo $this->url(array('controller'=>'site-investigation', 'action' => 'delete', 'id' => $siteInvestigation->id)); ?>" class="autoConfirm">Delete</a> |
+<!--			<a href="--><?php //echo $this->url(array('controller'=>'site-investigation', 'action' => 'export', 'id' => $siteInvestigation->id)); ?><!--">Export as CSV</a>-->
+		</td>
+	</tr>
+	<?php endforeach; ?>
+	</tbody>
+</table>
