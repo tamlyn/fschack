@@ -10,7 +10,7 @@ class Model_SiteInvestigation extends Model_Base{
 	function getMeanMeasurement($type){
 		$values =  array();
 		foreach($this->getMeasurementsByType($type) as $value){
-			$values[] = $value['value'];
+			$values[] = $value->value;
 		}
 		if($values){
 			return array_sum($values) / count($values);
@@ -25,11 +25,6 @@ class Model_SiteInvestigation extends Model_Base{
 	}
 	function getMeanDepth(){
 		return $this->getMeanMeasurement('depth');
-	}
-
-	function getWidth() {
-		$measurement = array_shift($this->getMeasurementsByType('water_width'));
-		return $this->width = $measurement->value;
 	}
 
 	function getFlowrates() {

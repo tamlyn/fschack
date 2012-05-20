@@ -21,13 +21,13 @@ class InvestigationController extends BaseController
 		$siteInvestigation = $investigation->siteInvestigations[0];
 
 		$maxWidth = 1;
-		$margin = ($maxWidth - $siteInvestigation->width) / 2;
+		$margin = ($maxWidth - $siteInvestigation->width->value) / 2;
 		$series = array();
 		$numPoints = count($siteInvestigation->depths);
 
 		$series[] = array(-$margin, 0);
 		foreach ($siteInvestigation->depths as $i => $measurement) {
-			$series[] = array(($siteInvestigation->width/($numPoints-1)*$i), floatval($measurement->value));
+			$series[] = array(($siteInvestigation->width->value/($numPoints-1)*$i), floatval($measurement->value));
 		}
 		$series[] = array($maxWidth, 0);
 
@@ -49,12 +49,12 @@ class InvestigationController extends BaseController
 			),
 			'series' => $series
 		);
-		$this->view->meanFlowrate = $this->view->investigation->siteInvestigations[0]->getMeanFlowrate();
-		$this->view->meanDepth = $this->view->investigation->siteInvestigations[0]->getMeanDepth();
-		$this->view->maxDepth = $this->view->investigation->maxDepth;
-		$this->view->minDepth = $this->view->investigation->minDepth;
-		$this->view->maxWaterWidth = $this->view->investigation->maxWaterWidth;
-		$this->view->minWaterWidth = $this->view->investigation->minWaterWidth;
+		$this->view->meanFlowrate = $siteInvestigation->getMeanFlowrate();
+		$this->view->meanDepth = $siteInvestigation->getMeanDepth();
+		$this->view->maxDepth = $investigation->maxDepth;
+		$this->view->minDepth = $investigation->minDepth;
+		$this->view->maxWaterWidth = $investigation->maxWaterWidth;
+		$this->view->minWaterWidth = $investigation->minWaterWidth;
 
 		$this->view->investigation = $investigation;
 	}
