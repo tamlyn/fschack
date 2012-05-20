@@ -11,10 +11,11 @@ class UploadController extends BaseController {
 		@mkdir($this->tmpPath, 0777, true);
 
 		$this->fields = array(
-			'sites'            => 'Sites',
+			'sites'            => 'Site Name',
 			'water_width'      => 'Water Width',
 			'wetted_perimeter' => 'Wetted Perimeter',
-			'gradient'         => 'Gradient',
+			'gradient_degrees' => 'Gradient (degrees)',
+			'gradient_diff'    => 'Gradient (m/m)',
 			'depth'            => 'Depth',
 			'flowrate'         => 'Flow Rate',
 			'bedload_length'   => 'Bedload Length',
@@ -150,6 +151,7 @@ class UploadController extends BaseController {
 					for ($col = 2; $col<=$sheet['numCols']; $col++) {
 						if (isset($sheet['cells'][$row][$col])) {
 							$examples[$row][] = $sheet['cells'][$row][$col];
+							if (count($examples[$row]) > 5) break;
 						}
 					}
 				}
@@ -167,8 +169,30 @@ class UploadController extends BaseController {
 				$statement->execute(array(':hash'=>$hash));
 				$fields = $statement->fetch(PDO::FETCH_COLUMN);
 				if (!$fields) {
+					$guesses = array();
+					foreach ($sheetData['rows'] as $i=>$row) {
+						$toCompare = strtolower($row);
+						$guess = null;
+						if (strpos($toCompare, 'mean') === false && strpos($toCompare, 'mode') === false) {
+							if (strpos($toCompare, 'depth') !== false) {
+								$guess = 'depth';
+							} else if (strpos($toCompare, 'wetted') !== false) {
+								$guess = 'wetted_perimeter';
+							} else if (strpos($toCompare, 'gradient') !== false) {
+								$guess = (strpos($toCompare, 'm') === false ? 'gradient_degrees' : 'gradient_diff');
+							} else if (strpos($toCompare, 'flowrate') !== false || strpos($toCompare, 'velocity') !== false) {
+								$guess = 'flowrate';
+							} else if (strpos($toCompare, 'bedload') !== false) {
+								$guess = 'bedload_length';
+							} else if (strpos($toCompare, 'angular') !== false || strpos($toCompare, 'round') !== false) {
+								$guess = 'roundness';
+							}
+						}
+						$guesses[$i] = $guess;
+					}
 					$this->view->sheets = $this->_request->sheets;
 					$this->view->todo = $sheetData;
+					$this->view->enteredFields = $guesses;
 					$this->view->fields = array_merge(array('ignore'=>'[ignore]'), $this->fields);
 					$errors = true;
 					break;
@@ -180,13 +204,11 @@ class UploadController extends BaseController {
 				$allInvestigations = array();
 				foreach ($hashes as $hash=>$sheetData) {
 					foreach ($sheetData['sheetIndexes'] as $sheetIndex) {
-						// TODO: Make this into an investigation object
 						$investigation = $this->readInvestigation($spreadsheet, (array)json_decode($fields), $sheetIndex);
 						$investigation->date = $this->view->date;
 						$investigation->school = $this->view->school;
 						$investigation->centre = $this->view->centre;
 						Model_Investigation::insert($investigation);
-//						$investigation->save();
 						$allInvestigations[] = $investigation;
 					}
 				}
