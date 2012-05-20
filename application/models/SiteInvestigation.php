@@ -21,6 +21,12 @@ class Model_SiteInvestigation extends Model_Base{
 		}
 	}
 
+	function getSite(){
+		return Model_Site::fetchById($this->siteId);
+	}
+
+
+
 	function getDepths(){
 		$this->depths = $this->getMeasurementsByType('depth');
 		array_push($this->depths, new Model_Measurement(array('value' => 0)));
@@ -50,11 +56,23 @@ class Model_SiteInvestigation extends Model_Base{
 		return array_shift($this->getMeasurementsByType('water_width'));
 	}
 
-	function getWettedPerimiter(){
+	function getWettedPerimeter(){
 		return array_shift($this->getMeasurementsByType('wetted_perimeter'));
 	}
 	function getGradientDegrees(){
 		return array_shift($this->getMeasurementsByType('gradient_degrees'));
+	}
+
+	function getCsa(){
+		return $this->meanFlowRate * $this->meanDepth;
+	}
+
+	function getDischarge(){
+		return $this->csa * $this->meanFlowRate;
+	}
+
+	function getHydraulicRadius(){
+		return $this->csa / $this->wettedPerimeter;
 	}
 
 	public function delete() {

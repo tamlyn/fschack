@@ -16,6 +16,7 @@ class Model_Investigation extends Model_Base{
 			if(!$site){
 				$site = new Model_Site();
 				$site->centre = $investigation->centre;
+				$site->title = $siteInvestigation->site_name;
 				$site->save();
 			}
 			$siteInv = new Model_SiteInvestigation();
