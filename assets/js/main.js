@@ -91,21 +91,16 @@ app.charts = {
 	},
 
 	drawDepthSeries: function(index) {
-		var data = app.charts.drawers[window.graphData.type](window.graphData.series[index]);
-		app.charts.chart.draw(data, window.graphData.options);
-	},
-
-	drawers: {
-		depth: function(series) {
-
-			var data = new google.visualization.DataTable();
-			data.addColumn('number', 'Width');
-			data.addColumn('number', 'Depth');
-			data.addRows(series);
-
-			return data;
+		var series = window.graphData.series[index];
+		var data = new google.visualization.DataTable();
+		for (var i in series.columns) {
+			data.addColumn(series.columns[i].type, series.columns[i].label);
 		}
+		data.addRows(series.points);
+
+		app.charts.chart.draw(data, window.graphData.options);
 	}
+
 }
 
 //start it up

@@ -65,17 +65,24 @@ class InvestigationController extends BaseController
 
 	protected function makeDepthSeries($siteInvestigation, $maxWidth) {
 		$margin = ($maxWidth - $siteInvestigation->width->value) / 2;
-		$series = array();
+		$series = array(
+			'title' => $siteInvestigation->site->name . ' ' . $siteInvestigation->date,
+			'columns' => array(
+				array('type' => 'number', 'label' => 'Width'),
+				array('type' => 'number', 'label' => 'Depth'),
+			),
+			'points' => array()
+		);
 		$numPoints = count($siteInvestigation->depths);
 
-		$series[] = array(-$margin, 0);
+		$series['points'][] = array(-$margin, 0);
 		foreach ($siteInvestigation->depths as $i => $measurement) {
-			$series[] = array(
+			$series['points'][] = array(
 				($siteInvestigation->width->value / ($numPoints - 1) * $i),
 				floatval($measurement->value)
 			);
 		}
-		$series[] = array($maxWidth, 0);
+		$series['points'][] = array($maxWidth, 0);
 
 		return $series;
 	}
