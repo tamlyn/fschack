@@ -1,0 +1,24 @@
+<form method="post" action="<?php echo $this->url(); ?>" class="uniForm">
+	<fieldset class="inlineLabels">
+		<div class="ctrlHolder">
+			<label for="date">Date</label>
+			<input type="text" name="date" id="date" value="<?php echo date('d-m-Y', strtotime($this->investigation->startDate)); ?>" />
+		</div>
+		<div class="ctrlHolder">
+			<label for="name">Name</label>
+			<input type="text" name="name" id="name" value="<?php echo $this->investigation->name; ?>" />
+		</div>
+		<div class="ctrlHolder">
+			<label for="centre">Centre</label>
+			<input type="text" name="centre" id="centre" value="<?php echo $this->investigation->centre; ?>" />
+		</div>
+		<div class="ctrlHolder">
+			<label for="school">School</label>
+			<input type="text" name="schoolName" id="school" value="<?php echo $this->investigation->schoolName; ?>" />
+		</div>
+		<div class="buttonHolder">
+			<input type="submit" value="Save" class="primaryAction" />
+			<a href="<?php echo $this->url(array('action'=>'overview')); ?>" class="secondaryAction">Cancel</a>
+		</div>
+	</fieldset>
+</form>

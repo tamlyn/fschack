@@ -88,6 +88,11 @@ class Model_Investigation extends Model_Base{
 		return (float)$this->getMax('water_width');
 	}
 
+	// only use this for display purposes
+	public function getDateString() {
+		return date('d M Y', strtotime($this->startDate));
+	}
+
 	public function delete() {
 		foreach ($this->getSiteInvestigations() as $siteInvestigation) {
 			$siteInvestigation->delete();

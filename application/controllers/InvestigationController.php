@@ -3,6 +3,7 @@
 class InvestigationController extends BaseController
 {
 	public function indexAction() {
+		$this->view->title = 'Investigations';
 		$this->view->investigations = Model_Investigation::fetchAll();
 	}
 
@@ -18,8 +19,25 @@ class InvestigationController extends BaseController
 	}
 
 	public function overviewAction() {
+		$this->view->title = 'Investigation Overview';
 		$investigation = Model_Investigation::fetchById($this->_request->id);
+		$this->validateData($investigation);
 		$this->view->investigation = $investigation;
+	}
+
+	public function editAction() {
+		$this->view->title = 'Edit Investigation';
+		$investigation = Model_Investigation::fetchById($this->_request->id);
+		$this->validateData($investigation);
+
+		$this->view->investigation = $investigation;
+		if ($this->_request->isPost()) {
+			$investigation->fromArray($this->_request->getParams());
+			$investigation->startDate = date('Y-m-d', strtotime($this->_request->date));
+			$investigation->save();
+			$this->_helper->FlashMessenger(array('info'=>'Investigation saved'));
+			$this->_helper->redirector->gotoRoute(array('action'=>'overview'));
+		}
 	}
 
 	public function sitesAction() {
