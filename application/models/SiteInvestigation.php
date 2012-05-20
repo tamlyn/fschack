@@ -8,14 +8,14 @@ class Model_SiteInvestigation extends Model_Base{
 	}
 	
 	function getDepths(){
-		$depths = $this->getMeasurementsByType('depth');
-		array_push($depths, new Model_Measurement(array('value' => 0)));
-		array_unshift($depths, new Model_Measurement(array('value' => 0)));
-		return $depths;
+		$this->depths = $this->getMeasurementsByType('depth');
+		array_push($this->depths, new Model_Measurement(array('value' => 0)));
+		array_unshift($this->depths, new Model_Measurement(array('value' => 0)));
+		return $this->depths;
 	}
 
 	function getWidth() {
-		return array_shift($this->getMeasurementsByType('water_width'));
+		return $this->width = array_shift($this->getMeasurementsByType('water_width'));
 	}
 
 }
