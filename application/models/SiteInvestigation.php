@@ -2,7 +2,7 @@
 
 class Model_SiteInvestigation extends Model_Base{	
 	public $id;
-	protected $_tableName = 'siteInvestigations';
+	protected $_tableName = 'siteinvestigations';
 	
 	function getMeasurmentsByType(){
 		$q = "select * from measurements where type = ? and siteInvestigationId = ?";
