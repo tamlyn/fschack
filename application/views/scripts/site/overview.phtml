@@ -7,8 +7,9 @@
 <table class="dtable">
 	<thead>
 	<tr>
-		<th>Position</th>
+		<th>Date</th>
 		<th>Name</th>
+		<th>Group</th>
 		<th>Width</th>
 		<th>Mean depth</th>
 		<th>Mean flow rate</th>
@@ -18,7 +19,8 @@
 	<tbody>
 	<?php foreach ($this->site->siteInvestigations as $siteInvestigation) : ?>
 	<tr>
-		<td><?php echo $siteInvestigation->siteOrder+1; ?></td>
+		<td><?php echo $siteInvestigation->investigation->dateString; ?></td>
+		<td><?php echo $siteInvestigation->investigation->name; ?></td>
 		<td><?php echo $siteInvestigation->getSite()->title; ?></td>
 		<td><?php echo $siteInvestigation->getWidth()->value; ?></td>
 		<td><?php echo round($siteInvestigation->getMeanDepth(), 2); ?></td>

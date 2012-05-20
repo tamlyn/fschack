@@ -22,5 +22,48 @@ class SiteController extends BaseController
 		$this->view->site = $site;
 	}
 
+
+	public function sitesAction() {
+		$site = Model_Site::fetchById($this->_request->id);
+
+		$series = array();
+		$maxDepth = $site->getMaxWaterWidth();
+		foreach($site->siteInvestigations as $siteInvestigation) {
+			$series[] = $this->makeDepthSeries($siteInvestigation, $maxDepth);
+		}
+
+		$this->view->graphData = array(
+			'type' => 'depth',
+			'options' => array(
+				'hAxis' => array(
+					'title'=>'River width (m)',
+//					'minValue'=>-$margin,
+//					'maxValue'=>$maxWidth
+				),
+				'vAxis'=>array(
+					'title'=>'Depth (m)',
+					'direction'=>-1
+				),
+				'legend'=>array(
+					'position'=>'none'
+				),
+				'animation' => array(
+					'duration' => 1000,
+					'easing' => 'out'
+				)
+			),
+			'series' => $series
+		);
+		$this->view->meanFlowrate = $siteInvestigation->getMeanFlowrate();
+		$this->view->meanDepth = $siteInvestigation->getMeanDepth();
+		$this->view->maxDepth = $investigation->maxDepth;
+		$this->view->minDepth = $investigation->minDepth;
+		$this->view->maxWaterWidth = $investigation->maxWaterWidth;
+		$this->view->minWaterWidth = $investigation->minWaterWidth;
+
+		$this->view->investigation = $investigation;
+	}
+
+
 }
 
