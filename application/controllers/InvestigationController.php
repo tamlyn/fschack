@@ -19,10 +19,6 @@ class InvestigationController extends BaseController
 
 	public function overviewAction() {
 		$investigation = Model_Investigation::fetchById($this->_request->id);
-		$siteData = array();
-		foreach ($this->view->investigation->siteInvestigations[0] as $site) {
-//			$siteData[] = ;
-		}
 		$this->view->investigation = $investigation;
 	}
 

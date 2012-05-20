@@ -50,11 +50,16 @@ class Model_SiteInvestigation extends Model_Base{
 		return array_shift($this->getMeasurementsByType('water_width'));
 	}
 
-	function getWettedPerimiter(){
+	function getWettedPerimeter(){
 		return array_shift($this->getMeasurementsByType('wetted_perimeter'));
 	}
 	function getGradientDegrees(){
 		return array_shift($this->getMeasurementsByType('gradient_degrees'));
+	}
+
+	public function getSite() {
+		$this->site = Model_Site::fetchById($this->siteId);
+		return $this->site;
 	}
 
 	public function delete() {

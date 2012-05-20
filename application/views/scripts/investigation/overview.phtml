@@ -1,0 +1,22 @@
+<h2>Centre: <?php echo $this->investigation->centre; ?></h2>
+
+<h3>Site investigations</h3>
+<table class="dtable">
+	<thead>
+	<tr>
+		<th>Name</th>
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+	<?php foreach ($this->investigation->siteInvestigations as $siteInvestigation) : ?>
+	<tr>
+		<td><?php echo $siteInvestigation->getSite()->name; ?></td>
+		<td>
+			<a href="<?php echo $this->url(array('action' => 'delete', 'id' => $siteInvestigation->id)); ?>" class="autoConfirm">Delete</a> |
+			<a href="<?php echo $this->url(array('action' => 'export', 'id' => $siteInvestigation->id)); ?>">Export as CSV</a>
+		</td>
+	</tr>
+	<?php endforeach; ?>
+	</tbody>
+</table>
