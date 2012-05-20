@@ -15,6 +15,12 @@ class InvestigationController extends BaseController
 		}
 
 		$this->view->graphData = $graphData;
+		$this->view->meanFlowrate = $this->view->investigation->siteInvestigations[0]->getMeanFlowrate();
+		$this->view->meanDepth = $this->view->investigation->siteInvestigations[0]->getMeanDepth();
+		$this->view->maxDepth = $this->view->investigation->maxDepth;
+		$this->view->minDepth = $this->view->investigation->minDepth;
+		$this->view->maxWaterWidth = $this->view->investigation->maxWaterWidth;
+		$this->view->minWaterWidth = $this->view->investigation->minWaterWidth;
 	}
 
 	public function exportAction() {
