@@ -37,6 +37,7 @@ class UploadController extends BaseController {
 	}
 
 	public function indexAction() {
+		$this->view->title = 'Import data';
 		$this->view->sites = array();
 		if ($this->_request->isPost()) {
 			if (!isset($_FILES['file'])) {
@@ -72,6 +73,7 @@ class UploadController extends BaseController {
 	}
 
 	public function importAction() {
+		$this->view->title = 'Import data - file info';
 		$uploadedFile = $this->getUploadedFile();
 
 		if (!$uploadedFile) {
@@ -111,7 +113,7 @@ class UploadController extends BaseController {
 				$errors[] = 'Please enter a centre';
 			}
 			if (!$this->view->selectedSheets) {
-				$errors[] = 'Please choose at least one sheet';
+				$errors[] = 'Please choose at least one worksheet';
 			}
 
 			if ($errors) {
@@ -139,7 +141,7 @@ class UploadController extends BaseController {
 				}
 				if (!$toSave['sites']) {
 					$this->view->enteredFields = $this->_request->fields;
-					$this->_helper->FlashMessenger(array('error'=>'One of the rows must be for sites'));
+					$this->_helper->FlashMessenger(array('error'=>'One of the rows must be for site names'));
 				} else {
 					$statement = $db->prepare('REPLACE INTO file_formats (hash, fields) VALUES (:hash, :fields)');
 					$statement->execute(array(':hash'=>$this->_request->hash, ':fields'=>json_encode($toSave)));
@@ -160,7 +162,7 @@ class UploadController extends BaseController {
 					for ($col = 2; $col<=$sheet['numCols']; $col++) {
 						if (isset($sheet['cells'][$row][$col])) {
 							$examples[$row][] = $sheet['cells'][$row][$col];
-							if (count($examples[$row]) > 5) break;
+							if (count($examples[$row]) > 3) break;
 						}
 					}
 				}
@@ -189,7 +191,7 @@ class UploadController extends BaseController {
 								$guess = 'wetted_perimeter';
 							} else if (strpos($toCompare, 'gradient') !== false) {
 								$guess = (strpos($toCompare, 'm') === false ? 'gradient_degrees' : 'gradient_diff');
-							} else if (strpos($toCompare, 'flowrate') !== false || strpos($toCompare, 'velocity') !== false) {
+							} else if ((strpos($toCompare, 'flowrate') !== false || strpos($toCompare, 'velocity') !== false) && strpos($toCompare, 'revs') === false) {
 								$guess = 'flowrate';
 							} else if (strpos($toCompare, 'bedload') !== false) {
 								$guess = 'bedload_length';
@@ -199,6 +201,7 @@ class UploadController extends BaseController {
 						}
 						$guesses[$i] = $guess;
 					}
+					$this->view->title = 'Import data - file format';
 					$this->view->sheets = $this->_request->sheets;
 					$this->view->todo = $sheetData;
 					$this->view->enteredFields = $guesses;

@@ -1,6 +1,6 @@
 <?php if ($this->todo) : ?>
 	<h3>Oh no!</h3>
-	We don't know what to do with this sheet format. Please choose a category for each row:
+	We don't know what to do with this worksheet format. Please choose a definition for each row
 	<form method="post" action="<?php echo $this->url(); ?>" class="uniForm">
 		<fieldset class="inlineLabels">
 			<input type="hidden" name="phase" value="definition" />
@@ -22,7 +22,7 @@
 				</div>
 				<?php endforeach; ?>
 			<div class="buttonHolder">
-				<input type="submit" value="Save" class="primaryAction" />
+				<input type="submit" value="Continue" class="primaryAction" />
 			</div>
 		</fieldset>
 	</form>
