@@ -81,32 +81,79 @@ class InvestigationController extends BaseController
 
 	public function exportAction() {
 		$investigation = Model_Investigation::fetchById($this->_request->id);
+		$filename = urlencode(str_replace(' ', '_', $investigation->schoolName))."-".$investigation->startDate.'-export.csv';
+		//$data = $investigation->toArray();
 
-		$filename = 'export.csv';
-		$data = $investigation->toArray();
-
-		$this->_response->setHeader('Content-type', 'application/octet-stream');
-		$this->_response->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
+//		$this->_response->setHeader('Content-type', 'application/octet-stream');
+//		$this->_response->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
 
 
 		//make header
-		if ($data) {
-			$headers = array_keys($data[0]);
-			$headers = array_map(function($name) {
-				return ucfirst(str_replace('_', ' ', $name));
-			}, $headers);
-			echo implode(',', $headers) . "\n";
+		$rows['headers'] = array('Site:');
+		$rows['siteNames'] = array('Site name:');
+		$rows['siteWidths'] = array('Widths:');
+		$rows['sitePerimeters'] = array('Wetted perimeter:');
+		foreach($investigation->getSiteInvestigations() as $i => $siteInvestigation){
+			$rows['headers'][] = $i;
+			$rows['siteNames'][]  = $siteInvestigation->site->title;
+			$rows['siteWidths'][] = $siteInvestigation->width->value;
+			$rows['sitePerimeters'][] = $siteInvestigation->wettedPerimeter->value;
+			foreach($siteInvestigation->depths as $j => $depth){
+				if(!isset($rows['siteWidth'.($j+1)])){
+					$rows['siteWidth'.($j+1)] = array();
+					$rows['siteWidth'.($j+1)][] = "Depth ".($j+1).":";
+				}else{
+					$rows['siteWidth'.($j+1)][] = $depth->value;
+				}
+			}
+			if(!isset($rows['meanDepth']))
+				$rows['meanDepth'] = array('Mean Depth:');
+			$rows['meanDepth'][] = $siteInvestigation->meanDepth;
+
+			foreach($siteInvestigation->flowRates as $j => $rate){
+				if(!isset($rows['flowRates'.($j+1)])){
+					$rows['flowRates'.($j+1)] = array();
+					$rows['flowRates'.($j+1)][] = "Flowrate ".($j+1).":";
+				}else{
+					$rows['flowRates'.($j+1)][] = $rate->value;
+				}
+			}
+			if(!isset($rows['meanFlowRate']))
+				$rows['meanFlowRate'] = array('Mean Flow Rate:');
+			$rows['meanFlowRate'][] = $siteInvestigation->meanFlowRate;
+
+			if(!isset($rows['csa']))
+				$rows['csa'] = array('C.S.A. (m^2):');
+			$rows['csa'][] = $siteInvestigation->csa;
+
+
+			if(!isset($rows['discharge']))
+				$rows['discharge'] = array('Discharge (m^3/s):');
+			$rows['discharge'][] = $siteInvestigation->discharge;
+
+			if(!isset($rows['hydraulic_radius']))
+				$rows['hydraulic_radius'] = array('Hydraulic Radius:');
+			$rows['hydraulic_radius'][] = $siteInvestigation->hydraulicRadius;
+
+
+		}
+		print_r($rows);
+		foreach($rows as $row){
+			echo implode(',', $row) . "\n";
+
 		}
 
-		foreach ($data as $row) {
-			//quote data
-			$quotedRow = array();
-			foreach ($row as $cell) {
-				$quotedRow[] = '"' . str_replace('"', '""', $cell) . '"';
-			}
-			//output immediately (to save memory)
-			echo implode(',', $quotedRow) . "\n";
-		}
+
+//
+//		foreach ($data as $row) {
+//			//quote data
+//			$quotedRow = array();
+//			foreach ($row as $cell) {
+//				$quotedRow[] = '"' . str_replace('"', '""', $cell) . '"';
+//			}
+//			//output immediately (to save memory)
+//			echo implode(',', $quotedRow) . "\n";
+//		}
 
 		$this->_helper->layout->disableLayout();
 		$this->_helper->viewRenderer->setNoRender();
