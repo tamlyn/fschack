@@ -1,27 +1,25 @@
-/* Generic */
-
 body {
 	font: 14px 'Helvetica', 'Arial', sans-serif;
 	margin: 0 30px;
-	background: #8F8F8F;
+	background: #d9ecee;
 }
 
 h1 {
 	font-size: 32px;
 	font-weight: bold;
-	margin: 20px 0;
+	margin: 20px 0px;
 }
 
 h2 {
 	font-size: 26px;
 	font-weight: bold;
-	margin: 16px 0;
+	margin: 16px 0px;
 }
 
 h3 {
 	font-size: 20px;
 	font-weight: bold;
-	margin: 13px 0;
+	margin: 13px 0px;
 }
 
 a:link, a:visited, span.link {
@@ -36,11 +34,9 @@ a:hover, span.link:hover {
 	color: #105b86;
 }
 
-/* Layout */
-
 #wrapper,
 #content {
-	background: #FFFFFF;
+	background: #fff;
 }
 
 #content {
@@ -59,10 +55,10 @@ a:hover, span.link:hover {
 }
 
 #nav-bar {
-	background: rgba(73, 73, 73, 0.8);
+	background: #d9ecee;
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: 0px;
+	left: 0px;
 	z-index: 99999;
 	width: 100%;
 	padding-top: 4px;
@@ -71,7 +67,7 @@ a:hover, span.link:hover {
 #nav {
 	margin: 0 30px;
 	padding: 0 0 10px;
-	background: #000;
+	background: #008c9a;
 	height: 26px;
 	display: block;
 	position: relative;
@@ -80,8 +76,8 @@ a:hover, span.link:hover {
 #nav ul {
 	float: left;
 	list-style: none;
-	margin: 0;
-	padding: 0 10px;
+	margin: 0px;
+	padding: 0px 10px;
 }
 
 #nav li {
@@ -96,11 +92,11 @@ a:hover, span.link:hover {
 	color: #efefef;
 	text-decoration: none;
 	margin-bottom: -1px;
-	border-top: 2px solid #000;
+	border-top: 2px solid #fff;
 }
 
 #nav li a:hover, #nav li.active a {
-	border-top-color: #fff;
+	border-top-color: #a6aa14;
 }
 
 .clear {
@@ -124,12 +120,16 @@ a:hover, span.link:hover {
 	min-height: 200px;
 }
 
-
 /* Datatables */
+
+table {
+	border-collapse: collapse;
+}
 
 table.dataTable th {
 	text-align: left;
 }
+
 table.dataTable td {
 	background-color: #fff;
 	border-bottom: 1px solid #ccc;
@@ -147,22 +147,41 @@ table.dataTable tr.selected td.sorting_1 {
 	background-color: #d6e9c6;
 }
 
-.messages {
-	clear: left;
-	list-style: none;
-	padding: 0 0 10px;
+.dataTables_info {
+	color: #888;
+	padding: 5px 10px;
+}
+
+/* Forms */
+
+fieldset {
+	padding: 0;
+	border: 0;
 	margin: 0;
 }
 
-.messages li {
-	padding: 5px 5px 5px 25px;
-	margin: 0 0 10px;
-	background: #ddf url(../img/information.png) no-repeat 4px 5px;
-	border: 1px solid #88f;
+fieldset ol, fieldset ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
 
-.messages li.error {
-	background-color: #fdd;
-	border-color: #e77;
-	background-image: url(../img/exclamation.png);
+fieldset ul li {
+	padding: 2px 0px 12px 0px;
+}
+
+.ctrlHolder > label, .ctrlHolder > .label {
+	padding: 0;
+	margin: 0;
+	display: block;
+	float: left;
+	width: 10em;
+}
+
+.ctrlHolder ul {
+	margin-left: 10em;
+}
+
+fieldset input, fieldset select, fieldset textarea {
+	margin: 0px;
 }

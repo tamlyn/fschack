@@ -1,14 +1,10 @@
 <?php  
 
 class Model_SiteInvestigation extends Model_Base{	
-	public $id;
 	protected $_tableName = 'siteinvestigations';
 	
 	function getMeasurementsByType($type){
-		$statement = $this->_db->prepare("select * from measurements where type = :type and siteInvestigationId = :id");
-		$statement->execute(array(':type'=>$type, ':id'=>$this->id));
-
-		return $statement->fetchAll();
+		return Model_Measurement::fetchAll('type = :type and siteInvestigationId = :id', array(':type'=>$type, ':id'=>$this->id));
 	}
 
 	function getMeanMeasurement($type){
@@ -22,7 +18,10 @@ class Model_SiteInvestigation extends Model_Base{
 	}
 
 	function getDepths(){
-		return $this->getMeasurementsByType('depth');
+		$this->depths = $this->getMeasurementsByType('depth');
+		array_push($this->depths, new Model_Measurement(array('value' => 0)));
+		array_unshift($this->depths, new Model_Measurement(array('value' => 0)));
+		return $this->depths;
 	}
 	function getMeanDepth(){
 		return $this->getMeanMeasurement('depth');

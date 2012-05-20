@@ -5,7 +5,7 @@ class Model_Investigation extends Model_Base{
 
 	static function insert($data){
 		$investigation = new Model_Investigation();
-		$investigation->startDate = $data->date;
+		$investigation->startDate = date('Y-m-d', strtotime($data->date));
 		$investigation->schoolName = $data->school;
 		$investigation->centre = $data->centre;
 		$investigation->save();
@@ -24,7 +24,6 @@ class Model_Investigation extends Model_Base{
 			$siteInv->save();
 
 			foreach($siteInvestigation->data as $type => $values){
-//				$q = "INSERT INTO measurements (siteInvestigationId, type, investigationSeriesIndex, value) VALUES (?,?,?,?)";
 				foreach($values as $i => $value){
 					$measurement = new Model_Measurement();
 					$measurement->siteInvestigationId = $siteInv->id;

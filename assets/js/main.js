@@ -15,55 +15,52 @@ app.init = {
 	bootstrap: function() {
 		//run conditional init functions if selector exists on page
 		for (var selector in app.init.selectors) {
-			if ($(selector).length) app.init.selectors[selector]();
+            var $element = $(selector);
+			if ($element.length) app.init.selectors[selector]($element);
 		}
 
 	},
 
 	//selector-based init functions, called from bootstrap
 	selectors: {
-		'#chart': function() {
+		'#chart': function($element) {
 			google.load('visualization', '1.0', {'packages':['corechart']});
 
-			google.setOnLoadCallback(app.charts.draw);
+			google.setOnLoadCallback(app.charts.init);
 		},
 
-		'.dtable': function(){
-			$('.dtable').dataTable({
-				bPaginate:false,
-				aaSorting:[
-					[1, 'desc']
-				]
+		'.dtable': function($element) {
+			$element.dataTable({
+				bPaginate:false
 			});
-		}
+		},
+
+        'input#date': function($element) {
+            $element.datepicker({
+                dateFormat: 'dd-mm-yy'
+            });
+        }
 	}
 };
 
 app.charts = {
-	draw: function() {
+	init: function() {
+		var data = app.charts.drawers[window.graphData.type](window.graphData.series);
 
-		// Create the data table.
-		data = new google.visualization.DataTable();
-		data.addColumn('string', 'Measurement');
-		data.addColumn('number', 'Depth');
-		data.addRows(window.graphData);
-
-		// Set chart options
-		var options = {
-			hAxis:{
-				title: 'Measurements'
-			},
-			vAxis: {
-				title: 'Depth (m)'
-			},
-			legend: {
-				position: 'none'
-			}
-		};
-
-		// Instantiate and draw our chart, passing in some options.
 		var chart = new google.visualization.LineChart(document.getElementById('chart'));
-		chart.draw(data, options);
+		chart.draw(data, window.graphData.options);
+	},
+
+	drawers: {
+		depth: function(series) {
+
+			var data = new google.visualization.DataTable();
+			data.addColumn('number', 'Width');
+			data.addColumn('number', 'Depth');
+			data.addRows(series);
+
+			return data;
+		}
 	}
 }
 

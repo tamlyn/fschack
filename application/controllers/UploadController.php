@@ -1,6 +1,6 @@
 <?php
 
-require_once 'lib/Excel/reader.php';
+require_once 'assets/lib/excel/Excel/reader.php';
 
 class UploadController extends BaseController {
 
@@ -11,20 +11,33 @@ class UploadController extends BaseController {
 		@mkdir($this->tmpPath, 0777, true);
 
 		$this->fields = array(
-			'sites'            => 'Sites',
+			'sites'            => 'Site Name',
 			'water_width'      => 'Water Width',
 			'wetted_perimeter' => 'Wetted Perimeter',
-			'gradient'         => 'Gradient',
+			'gradient_degrees' => 'Gradient (degrees)',
+			'gradient_diff'    => 'Gradient (m/m)',
 			'depth'            => 'Depth',
 			'flowrate'         => 'Flow Rate',
 			'bedload_length'   => 'Bedload Length',
 			'roundness'        => 'Roundness'
 		);
 
+		$this->uploadErrors = array(
+			UPLOAD_ERR_OK         => "No errors",
+			UPLOAD_ERR_INI_SIZE   => "Larger than upload_max_filesize",
+			UPLOAD_ERR_FORM_SIZE  => "Larger than form MAX_FILE_SIZE",
+			UPLOAD_ERR_PARTIAL    => "Partial upload",
+			UPLOAD_ERR_NO_FILE    => "No file chosen",
+			UPLOAD_ERR_NO_TMP_DIR => "No temporary directory",
+			UPLOAD_ERR_CANT_WRITE => "Can't write to disk",
+			UPLOAD_ERR_EXTENSION  => "File upload stopped by extension"
+//			UPLOAD_ERR_EMPTY      => "File is empty"
+		);
 		parent::init();
 	}
 
 	public function indexAction() {
+		$this->view->title = 'Import data';
 		$this->view->sites = array();
 		if ($this->_request->isPost()) {
 			if (!isset($_FILES['file'])) {
@@ -32,21 +45,19 @@ class UploadController extends BaseController {
 			} else {
 				$fileInfo = $_FILES['file'];
 				if ($fileInfo['error']) {
-					$this->_helper->FlashMessenger(array('error'=>$fileInfo['error']));
+					$this->_helper->FlashMessenger(array('error'=>$this->uploadErrors[$fileInfo['error']]));
 				} else if ($fileInfo['type'] != 'application/vnd.ms-excel') {
 					$this->_helper->FlashMessenger(array('error'=>'Wrong file type. Must be excel (.xls)'));
 				} else {
 					try {
 						$this->saveTempFile($fileInfo);
 						$this->_helper->redirector->gotoRoute(array('action'=>'import'));
-//						$sites = $this->readExcel($fileInfo['tmp_name']);
-//						$this->view->sites = $sites;
 					} catch (Exception $ex) {
 						$this->_helper->FlashMessenger(array('error'=>'Cannot read excel file: ' . $ex->getMessage()));
 					}
 				}
 			}
-//			$this->_helper->redirector->gotoRoute(array('action'=>'index'));
+			$this->_helper->redirector->gotoRoute(array('action'=>'index'));
 		}
 	}
 
@@ -62,6 +73,7 @@ class UploadController extends BaseController {
 	}
 
 	public function importAction() {
+		$this->view->title = 'Import data - file info';
 		$uploadedFile = $this->getUploadedFile();
 
 		if (!$uploadedFile) {
@@ -91,8 +103,8 @@ class UploadController extends BaseController {
 		} else {
 			// tried once, but insufficient data input
 			$errors = array();
-			if (!$this->view->date) {
-				$errors[] = 'Please enter a date';
+			if (!$this->view->date || !preg_match('/\d{2}-\d{2}-\d{4}/', $this->view->date)) {
+				$errors[] = 'Please enter a valid date';
 			}
 			if (!$this->view->school) {
 				$errors[] = 'Please enter a school';
@@ -101,7 +113,7 @@ class UploadController extends BaseController {
 				$errors[] = 'Please enter a centre';
 			}
 			if (!$this->view->selectedSheets) {
-				$errors[] = 'Please choose at least one sheet';
+				$errors[] = 'Please choose at least one worksheet';
 			}
 
 			if ($errors) {
@@ -129,7 +141,7 @@ class UploadController extends BaseController {
 				}
 				if (!$toSave['sites']) {
 					$this->view->enteredFields = $this->_request->fields;
-					$this->_helper->FlashMessenger(array('error'=>'One of the rows must be for sites'));
+					$this->_helper->FlashMessenger(array('error'=>'One of the rows must be for site names'));
 				} else {
 					$statement = $db->prepare('REPLACE INTO file_formats (hash, fields) VALUES (:hash, :fields)');
 					$statement->execute(array(':hash'=>$this->_request->hash, ':fields'=>json_encode($toSave)));
@@ -150,6 +162,7 @@ class UploadController extends BaseController {
 					for ($col = 2; $col<=$sheet['numCols']; $col++) {
 						if (isset($sheet['cells'][$row][$col])) {
 							$examples[$row][] = $sheet['cells'][$row][$col];
+							if (count($examples[$row]) > 3) break;
 						}
 					}
 				}
@@ -167,8 +180,31 @@ class UploadController extends BaseController {
 				$statement->execute(array(':hash'=>$hash));
 				$fields = $statement->fetch(PDO::FETCH_COLUMN);
 				if (!$fields) {
+					$guesses = array();
+					foreach ($sheetData['rows'] as $i=>$row) {
+						$toCompare = strtolower($row);
+						$guess = null;
+						if (strpos($toCompare, 'mean') === false && strpos($toCompare, 'mode') === false) {
+							if (strpos($toCompare, 'depth') !== false) {
+								$guess = 'depth';
+							} else if (strpos($toCompare, 'wetted') !== false) {
+								$guess = 'wetted_perimeter';
+							} else if (strpos($toCompare, 'gradient') !== false) {
+								$guess = (strpos($toCompare, 'm') === false ? 'gradient_degrees' : 'gradient_diff');
+							} else if ((strpos($toCompare, 'flowrate') !== false || strpos($toCompare, 'velocity') !== false) && strpos($toCompare, 'revs') === false) {
+								$guess = 'flowrate';
+							} else if (strpos($toCompare, 'bedload') !== false) {
+								$guess = 'bedload_length';
+							} else if (strpos($toCompare, 'angular') !== false || strpos($toCompare, 'round') !== false) {
+								$guess = 'roundness';
+							}
+						}
+						$guesses[$i] = $guess;
+					}
+					$this->view->title = 'Import data - file format';
 					$this->view->sheets = $this->_request->sheets;
 					$this->view->todo = $sheetData;
+					$this->view->enteredFields = $guesses;
 					$this->view->fields = array_merge(array('ignore'=>'[ignore]'), $this->fields);
 					$errors = true;
 					break;
@@ -180,13 +216,11 @@ class UploadController extends BaseController {
 				$allInvestigations = array();
 				foreach ($hashes as $hash=>$sheetData) {
 					foreach ($sheetData['sheetIndexes'] as $sheetIndex) {
-						// TODO: Make this into an investigation object
 						$investigation = $this->readInvestigation($spreadsheet, (array)json_decode($fields), $sheetIndex);
 						$investigation->date = $this->view->date;
 						$investigation->school = $this->view->school;
 						$investigation->centre = $this->view->centre;
 						Model_Investigation::insert($investigation);
-//						$investigation->save();
 						$allInvestigations[] = $investigation;
 					}
 				}
