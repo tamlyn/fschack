@@ -15,7 +15,8 @@ class Model_SiteInvestigation extends Model_Base{
 	}
 
 	function getWidth() {
-		return $this->width = array_shift($this->getMeasurementsByType('water_width'));
+		$measurement = array_shift($this->getMeasurementsByType('water_width'));
+		return $this->width = $measurement->value;
 	}
 
 }

@@ -19,16 +19,17 @@ class InvestigationController extends BaseController
 		$investigation = Model_Investigation::fetchById($this->_request->id);
 
 		$siteInvestigation = $investigation->siteInvestigations[0];
-		$maxWidth = 10;
+
+		$maxWidth = 1;
 		$margin = ($maxWidth - $siteInvestigation->width) / 2;
-		$graphData = array();
+		$series = array();
 		$numPoints = count($siteInvestigation->depths);
 
-		$graphData[] = array(-$margin, 0);
+		$series[] = array(-$margin, 0);
 		foreach ($siteInvestigation->depths as $i => $measurement) {
-			$graphData[] = array(($siteInvestigation->width/($numPoints-1)*$i), floatval($measurement->value));
+			$series[] = array(($siteInvestigation->width/($numPoints-1)*$i), floatval($measurement->value));
 		}
-		$graphData[] = array($maxWidth, 0);
+		$series[] = array($maxWidth, 0);
 
 		$this->view->graphData = array(
 			'type' => 'depth',
@@ -46,7 +47,7 @@ class InvestigationController extends BaseController
 					'position'=>'none'
 				),
 			),
-			'series' => $graphData
+			'series' => $series
 		);
 		$this->view->investigation = $investigation;
 	}
