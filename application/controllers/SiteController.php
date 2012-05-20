@@ -18,6 +18,7 @@ class SiteController extends BaseController
 	}
 
 	public function overviewAction() {
+		$this->view->title = 'Site overview';
 		$site = Model_Site::fetchById($this->_request->id);
 		$this->view->site = $site;
 	}
