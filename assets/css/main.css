@@ -55,13 +55,11 @@ a:hover, span.link:hover {
 }
 
 #nav-bar {
-	background: #d9ecee;
+	background: rgba(255, 255, 255, 0.5);
 	position: absolute;
-	top: 0px;
-	left: 0px;
-	z-index: 99999;
+	top: 0;
+	left: 0;
 	width: 100%;
-	padding-top: 4px;
 }
 
 #nav {
@@ -70,7 +68,6 @@ a:hover, span.link:hover {
 	background: #008c9a;
 	height: 26px;
 	display: block;
-	position: relative;
 }
 
 #nav ul {

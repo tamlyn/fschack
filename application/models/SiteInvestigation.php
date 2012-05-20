@@ -10,7 +10,7 @@ class Model_SiteInvestigation extends Model_Base{
 	function getMeanMeasurement($type){
 		$values =  array();
 		foreach($this->getMeasurementsByType($type) as $value){
-			$values[] = $value['value'];
+			$values[] = $value->value;
 		}
 		if($values){
 			return array_sum($values) / count($values);
@@ -27,10 +27,10 @@ class Model_SiteInvestigation extends Model_Base{
 		return $this->getMeanMeasurement('depth');
 	}
 
-	function getFlowrates(){
+	function getFlowrates() {
 		return $this->getMeasurementsByType('flowrate');
 	}
-
+	
 	function getMeanFlowrate(){
 		return $this->getMeanMeasurement('flowrate');
 	}

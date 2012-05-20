@@ -50,11 +50,11 @@ class Model_Investigation extends Model_Base{
 		$this->$minProperty =99999;
 		foreach($siteInvestigations as $si){
 			foreach($si->getMeasurementsByType($type) as $value){
-				if(($value['value'] > $this->$maxProperty) && $value['value']){
-					$this->$maxProperty = $value['value'];
+				if(($value->value > $this->$maxProperty) && $value->value){
+					$this->$maxProperty = $value->value;
 				}
-				if(($value['value'] < $this->$minProperty) && $value['value']){
-					$this->$minProperty = $value['value'];
+				if(($value->value < $this->$minProperty) && $value->value){
+					$this->$minProperty = $value->value;
 				}
 
 			}
