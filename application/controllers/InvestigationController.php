@@ -88,8 +88,8 @@ class InvestigationController extends BaseController
 		$filename = urlencode(str_replace(' ', '_', $investigation->schoolName))."-".$investigation->startDate.'-export.csv';
 		//$data = $investigation->toArray();
 
-//		$this->_response->setHeader('Content-type', 'application/octet-stream');
-//		$this->_response->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
+		$this->_response->setHeader('Content-type', 'application/octet-stream');
+		$this->_response->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
 
 
 		//make header
@@ -140,8 +140,37 @@ class InvestigationController extends BaseController
 			$rows['hydraulic_radius'][] = $siteInvestigation->hydraulicRadius;
 
 
+			foreach($siteInvestigation->bedloadLengths as $j => $length){
+				if(!isset($rows['bedloadLengths'.($j+1)])){
+					$rows['bedloadLengths'.($j+1)] = array();
+					$rows['bedloadLengths'.($j+1)][] = "Bedload Length ".($j+1).":";
+				}else{
+					$rows['bedloadLengths'.($j+1)][] = $length->value;
+				}
+			}
+
+			if(!isset($rows['meanBedloadLength']))
+				$rows['meanBedloadLength'] = array('Mean Bedload Length:');
+			$rows['meanBedloadLength'][] = $siteInvestigation->hydraulicRadius;
+
+/*
+			foreach($siteInvestigation->roundnesses as $j => $roundness){
+				if(!isset($rows['roundnesses'.($j+1)])){
+					$rows['roundnesses'.($j+1)] = array();
+					$rows['roundnesses'.($j+1)][] = "Roundness ".($j+1).":";
+				}else{
+					$rows['roundnesses'.($j+1)][] = $roundness->value;
+				}
+			}
+
+			if(!isset($rows['meanRoundness']))
+				$rows['meanRoundness'] = array('Mean Roundness:');
+			$rows['meanRoundness'][] = $siteInvestigation->meanRoundess;
+			*/
+
+
+
 		}
-		print_r($rows);
 		foreach($rows as $row){
 			echo implode(',', $row) . "\n";
 
