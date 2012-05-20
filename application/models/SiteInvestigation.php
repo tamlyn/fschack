@@ -1,7 +1,6 @@
 <?php  
 
 class Model_SiteInvestigation extends Model_Base{	
-	public $id;
 	protected $_tableName = 'siteinvestigations';
 	
 	function getMeasurementsByType($type){

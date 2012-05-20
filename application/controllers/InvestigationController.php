@@ -7,14 +7,23 @@ class InvestigationController extends BaseController
 	}
 
 	public function viewAction() {
-		$this->view->investigation = Model_Investigation::fetchById($this->_request->id);
+		$investigation = Model_Investigation::fetchById($this->_request->id);
+
+//		$siteData = array();
+//		foreach ($this->view->investigation->siteInvestigations[0] as $site) {
+//			$siteData[] = ;
+//		}
 
 		$graphData = array();
-		foreach ($this->view->investigation->siteInvestigations[0]->getDepths() as $i => $measurement) {
+		foreach ($investigation->siteInvestigations[0]->getDepths() as $i => $measurement) {
 			$graphData[] = array("$i", floatval($measurement['value']));
 		}
 
-		$this->view->graphData = $graphData;
+		$this->view->graphData = array(
+			'type' => 'depth',
+			'series' => $graphData
+		);
+		$this->view->investigation = $investigation;
 	}
 
 	public function exportAction() {

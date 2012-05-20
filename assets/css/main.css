@@ -156,26 +156,6 @@ table.dataTable tr.selected td.sorting_1 {
 	padding: 5px 10px;
 }
 
-.messages {
-	clear: left;
-	list-style: none;
-	padding: 0 0 10px;
-	margin: 0;
-}
-
-.messages li {
-	padding: 5px 5px 5px 25px;
-	margin: 0 0 10px;
-	background: #ddf url(../img/information.png) no-repeat 4px 5px;
-	border: 1px solid #88f;
-}
-
-.messages li.error {
-	background-color: #fdd;
-	border-color: #e77;
-	background-image: url(../img/exclamation.png);
-}
-
 /* Forms */
 
 fieldset {
@@ -196,10 +176,14 @@ fieldset ul li {
 
 .ctrlHolder > label, .ctrlHolder > .label {
 	padding: 0;
-	margin: 0 0.5em 0 0;
+	margin: 0;
 	display: block;
 	float: left;
-	width: 8.8em;
+	width: 10em;
+}
+
+.ctrlHolder ul {
+	margin-left: 10em;
 }
 
 fieldset input, fieldset select, fieldset textarea {
