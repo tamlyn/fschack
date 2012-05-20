@@ -25,7 +25,7 @@ class SiteController extends BaseController
 		$series1 = array(
 			'title' => $this->view->title,
 			'columns' => array(
-				array('type' => 'string', 'label' => 'Site'),
+				array('type' => 'date', 'label' => 'Date'),
 				array('type' => 'number', 'label' => 'Mean depth'),
 //				array('type' => 'number', 'label' => 'Mean flowrate'),
 				array('type' => 'number', 'label' => 'Discharge')
@@ -34,7 +34,7 @@ class SiteController extends BaseController
 		);
 		foreach ($site->siteInvestigations as $siteInvestigation) {
 			$series1['points'][] = array(
-				$site->title,
+				strtotime($siteInvestigation->investigation->startDate)*1000,
 				$siteInvestigation->meanDepth,
 //				$siteInvestigation->meanFlowrate,
 				$siteInvestigation->discharge
@@ -44,7 +44,7 @@ class SiteController extends BaseController
 		$this->view->graphData = array(
 			'options' => array(
 				'hAxis' => array(
-					'title' => 'Sites',
+					'title' => 'Date',
 //					'minValue'=>-$margin,
 //					'maxValue'=>$maxWidth
 				),

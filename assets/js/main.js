@@ -103,6 +103,10 @@ app.charts = {
 		for (var i in series.columns) {
 			data.addColumn(series.columns[i].type, series.columns[i].label);
 		}
+		for (var j in series.points) {
+
+			if (window.graphData.options.hAxis.title == 'Date') series.points[j][0] = new Date(series.points[j][0]);
+		}
 		data.addRows(series.points);
 
 		app.charts.chart.draw(data, window.graphData.options);
