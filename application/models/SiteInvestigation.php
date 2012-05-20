@@ -26,6 +26,11 @@ class Model_SiteInvestigation extends Model_Base{
 		return $this->site;
 	}
 
+	public function getInvestigation() {
+		$this->investigation = Model_Investigation::fetchById($this->investigationId);
+		return $this->investigation;
+	}
+
 	function getDepths(){
 		$this->depths = $this->getMeasurementsByType('depth');
 		array_push($this->depths, new Model_Measurement(array('value' => 0)));
