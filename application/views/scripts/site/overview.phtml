@@ -1,0 +1,35 @@
+<h2>Site: <?php echo $this->site->centre; ?> - <?php print $this->site->title; ?></h2>
+
+<h3>Site investigations</h3>
+<a href="<?php echo $this->url(array('action'=>'investigation')); ?>">View investigations</a>
+
+
+<table class="dtable">
+	<thead>
+	<tr>
+		<th>Date</th>
+		<th>Name</th>
+		<th>Group</th>
+		<th>Width</th>
+		<th>Mean depth</th>
+		<th>Mean flow rate</th>
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+	<?php foreach ($this->site->siteInvestigations as $siteInvestigation) : ?>
+	<tr>
+		<td><?php echo $siteInvestigation->investigation->dateString; ?></td>
+		<td><?php echo $siteInvestigation->investigation->name; ?></td>
+		<td><?php echo $siteInvestigation->getSite()->title; ?></td>
+		<td><?php echo $siteInvestigation->getWidth()->value; ?></td>
+		<td><?php echo round($siteInvestigation->getMeanDepth(), 2); ?></td>
+		<td><?php echo round($siteInvestigation->getMeanFlowRate(), 2); ?></td>
+		<td>
+			<a href="<?php echo $this->url(array('controller'=>'site-investigation', 'action' => 'delete', 'id' => $siteInvestigation->id)); ?>" class="autoConfirm">Delete</a> |
+<!--			<a href="--><?php //echo $this->url(array('controller'=>'site-investigation', 'action' => 'export', 'id' => $siteInvestigation->id)); ?><!--">Export as CSV</a>-->
+		</td>
+	</tr>
+	<?php endforeach; ?>
+	</tbody>
+</table>

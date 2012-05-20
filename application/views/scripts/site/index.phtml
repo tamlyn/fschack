@@ -1,0 +1,22 @@
+<table class="dtable">
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Centre</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach ($this->sites as $site): ?>
+		<tr>
+			<td><?php echo $site->title; ?></td>
+			<td><?php echo $site->centre; ?></td>
+			<td>
+				<a href="<?php echo $this->url(array('action' => 'overview', 'id' => $site->id)); ?>">View</a> |
+				<a href="<?php echo $this->url(array('action' => 'delete', 'id' => $site->id)); ?>" class="autoConfirm">Delete</a> |
+				<a href="<?php echo $this->url(array('action' => 'export', 'id' => $site->id)); ?>">Export as CSV</a>
+			</td>
+		</tr>
+	<?php endforeach; ?>
+	</tbody>
+</table>

@@ -22,6 +22,11 @@ class Model_Site extends Model_Base{
 			return null;
 		}
 	}
+
+
+	public function getSiteInvestigations() {
+		return Model_SiteInvestigation::fetchAll('siteId = :id', array(':id'=>$this->id));
+	}
 	/*
 	function getId(){
 		$q = "select site_id from site_alias a left join sites s on s.id = a.site_id where a.alias = ? and s.centre = ?";
