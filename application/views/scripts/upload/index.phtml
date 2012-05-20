@@ -1,8 +1,13 @@
-<form method="post" action="<?php echo $this->url(); ?>" enctype="multipart/form-data">
-	<fieldset>
+<form method="post" action="<?php echo $this->url(); ?>" enctype="multipart/form-data" class="uniForm">
+	<fieldset class="inlineLabels">
 		<legend>Upload spreadsheet</legend>
-		<input type="file" name="file" />
-		<input type="submit" value="Upload" />
+		<div class="ctrlHolder">
+			<label for="file">File</label>
+			<input type="file" name="file" id="file" />
+		</div>
+		<div class="buttonHolder">
+			<input type="submit" value="Upload" class="primaryAction" />
+		</div>
 	</fieldset>
 </form>
 

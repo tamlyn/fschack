@@ -166,3 +166,33 @@ table.dataTable tr.selected td.sorting_1 {
 	border-color: #e77;
 	background-image: url(../img/exclamation.png);
 }
+
+/* Forms */
+
+fieldset {
+	padding: 0;
+	border: 0;
+	margin: 0;
+}
+
+fieldset ol, fieldset ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+fieldset ul li {
+	padding: 2px 0px 12px 0px;
+}
+
+.ctrlHolder > label, .ctrlHolder > .label {
+	padding: 0;
+	margin: 0 0.5em 0 0;
+	display: block;
+	float: left;
+	width: 8.8em;
+}
+
+fieldset input, fieldset select, fieldset textarea {
+	margin: 0px;
+}
