@@ -2,8 +2,11 @@ home:
   label: Home
   controller: index
 investigations:
-  label: View data
+  label: View investigations
   controller: investigation
+sites:
+  label: View sites
+  controller: site
 import:
   label: Import data
   controller: upload
