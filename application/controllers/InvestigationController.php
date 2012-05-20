@@ -220,7 +220,7 @@ class InvestigationController extends BaseController
 
 			if(!isset($rows['meanRoundness']))
 				$rows['meanRoundness'] = array('Mean Roundness:');
-			$rows['meanRoundness'][] = $siteInvestigation->meanRoundess;
+			$rows['meanRoundness'][] = $siteInvestigation->meanRoundness;
 			*/
 
 

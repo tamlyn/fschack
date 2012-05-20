@@ -12,9 +12,7 @@
 			<td><?php echo $site->title; ?></td>
 			<td><?php echo $site->centre; ?></td>
 			<td>
-				<a href="<?php echo $this->url(array('action' => 'overview', 'id' => $site->id)); ?>">View</a> |
-				<a href="<?php echo $this->url(array('action' => 'delete', 'id' => $site->id)); ?>" class="autoConfirm">Delete</a> |
-				<a href="<?php echo $this->url(array('action' => 'export', 'id' => $site->id)); ?>">Export as CSV</a>
+				<a href="<?php echo $this->url(array('action' => 'overview', 'id' => $site->id)); ?>">View</a>
 			</td>
 		</tr>
 	<?php endforeach; ?>

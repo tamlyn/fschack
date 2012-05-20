@@ -56,11 +56,11 @@ class Model_SiteInvestigation extends Model_Base{
 	function getMeanBedloadLength(){
 		return $this->getMeanMeasurement('bedload_length');
 	}
-	function getRoundesses(){
+	function getRoundnesses(){
 		return $this->getMeasurementsByType('roundness');
 	}
 
-	function getMeanRoundess(){
+	function getMeanRoundness(){
 		return $this->getMeanMeasurement('roundness');
 	}
 	function getWidth(){
