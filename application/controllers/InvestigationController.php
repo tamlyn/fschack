@@ -23,17 +23,19 @@ class InvestigationController extends BaseController
 		$investigation = Model_Investigation::fetchById($this->_request->id);
 		$this->validateData($investigation);
 		$series1 = array(
-			'title' => $investigation->startDate,
+			'title' => $this->view->title,
 			'columns' => array(
 				array('type'=>'string', 'label'=>'Site'),
-				array('type'=>'number', 'label'=>'Mean depth')
+				array('type' => 'number', 'label' => 'Mean depth'),
+				array('type' => 'number', 'label' => 'Mean flowrate')
 			),
 			'points' => array()
 		);
 		foreach ($investigation->siteInvestigations as $siteInvestigation) {
 			$series1['points'][] = array(
 				$siteInvestigation->site->title,
-				$siteInvestigation->meanDepth
+				$siteInvestigation->meanDepth,
+				$siteInvestigation->meanFlowrate,
 			);
 		}
 
@@ -47,11 +49,19 @@ class InvestigationController extends BaseController
 				'vAxes' => array(
 					array(
 						'title' => 'Mean depth (m)',
-						'direction' => -1
+//						'direction'=>-1
+					),
+					array(
+						'title' => 'Mean flowrate (m/s)'
+					)
+				),
+				'series' => array(
+					1 => array(
+						'targetAxisIndex' => 1
 					)
 				),
 				'legend' => array(
-					'position' => 'none'
+//					'position' => 'none'
 				),
 				'animation' => array(
 					'duration' => 1000,
