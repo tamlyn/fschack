@@ -185,3 +185,7 @@ fieldset ul li {
 fieldset input, fieldset select, fieldset textarea {
 	margin: 0px;
 }
+
+div.summary {
+	font-size: 16px;
+}

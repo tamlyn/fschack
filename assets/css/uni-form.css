@@ -50,6 +50,12 @@
 	background: #666;
 }
 
+.uniForm .buttonHolder .primaryAction[disabled], .uniForm .buttonHolder .secondaryAction[disabled],
+.uniForm .buttonHolder .primaryAction[disabled]:hover, .uniForm .buttonHolder .secondaryAction[disabled]:hover {
+	background: #ccc;
+	cursor: default;
+}
+
 .uniForm .buttonHolder .primaryAction:hover, .uniForm .buttonHolder .secondaryAction:hover {
   background-color: #A6AA14;
 }

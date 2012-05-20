@@ -1,4 +1,10 @@
-<h2>Centre: <?php echo $this->investigation->centre; ?></h2>
+<div class="summary">
+	<b>Date</b>: <?php echo $this->investigation->getDateString(); ?><br />
+	<b>Name</b>: <?php echo $this->investigation->name; ?><br />
+	<b>Centre</b>: <?php echo $this->investigation->centre; ?><br />
+	<b>School</b>: <?php echo $this->investigation->schoolName; ?><br />
+	<a href="<?php echo $this->url(array('action'=>'edit')); ?>">Edit</a>
+</div>
 
 <h3>Site investigations</h3>
 <a href="<?php echo $this->url(array('action'=>'sites')); ?>">View sites</a>
@@ -24,7 +30,7 @@
 		<td><?php echo round($siteInvestigation->getMeanDepth(), 2); ?></td>
 		<td><?php echo round($siteInvestigation->getMeanFlowRate(), 2); ?></td>
 		<td>
-			<a href="<?php echo $this->url(array('controller'=>'site-investigation', 'action' => 'delete', 'id' => $siteInvestigation->id)); ?>" class="autoConfirm">Delete</a> |
+			<a href="<?php echo $this->url(array('controller'=>'site-investigation', 'action' => 'delete', 'id' => $siteInvestigation->id)); ?>" class="autoConfirm">Delete</a>
 <!--			<a href="--><?php //echo $this->url(array('controller'=>'site-investigation', 'action' => 'export', 'id' => $siteInvestigation->id)); ?><!--">Export as CSV</a>-->
 		</td>
 	</tr>

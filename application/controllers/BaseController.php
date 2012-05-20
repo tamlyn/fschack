@@ -22,6 +22,22 @@ class BaseController extends Zend_Controller_Action {
 
 	}
 
+	protected function validateData($item, $type = null, $action = null) {
+		if (!$item) {
+			$this->dataNotFound($type);
+		}
+	}
+
+	// flashes a '[controller name] not found' message, then redirects to the index page
+	protected function dataNotFound($type = null)
+	{
+		if (!$type) {
+			$type = $this->_request->getControllerName();
+		}
+		$this->_helper->FlashMessenger(array('error' => $type . ' not found'));
+		$this->_helper->redirector->gotoSimple('');
+	}
+
 }
 	
 ?>

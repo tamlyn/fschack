@@ -3,6 +3,7 @@
 class InvestigationController extends BaseController
 {
 	public function indexAction() {
+		$this->view->title = 'Investigations';
 		$this->view->investigations = Model_Investigation::fetchAll();
 	}
 
@@ -18,8 +19,25 @@ class InvestigationController extends BaseController
 	}
 
 	public function overviewAction() {
+		$this->view->title = 'Investigation Overview';
 		$investigation = Model_Investigation::fetchById($this->_request->id);
+		$this->validateData($investigation);
 		$this->view->investigation = $investigation;
+	}
+
+	public function editAction() {
+		$this->view->title = 'Edit Investigation';
+		$investigation = Model_Investigation::fetchById($this->_request->id);
+		$this->validateData($investigation);
+
+		$this->view->investigation = $investigation;
+		if ($this->_request->isPost()) {
+			$investigation->fromArray($this->_request->getParams());
+			$investigation->startDate = date('Y-m-d', strtotime($this->_request->date));
+			$investigation->save();
+			$this->_helper->FlashMessenger(array('info'=>'Investigation saved'));
+			$this->_helper->redirector->gotoRoute(array('action'=>'overview'));
+		}
 	}
 
 	public function sitesAction() {
@@ -65,16 +83,24 @@ class InvestigationController extends BaseController
 
 	protected function makeDepthSeries($siteInvestigation, $maxWidth) {
 		$margin = ($maxWidth - $siteInvestigation->width->value) / 2;
-		$series = array();
+		$series = array(
+			'title' => $siteInvestigation->site->name . ' ' . $siteInvestigation->date,
+			'columns' => array(
+				array('type' => 'number', 'label' => 'Width'),
+				array('type' => 'number', 'label' => 'Depth'),
+			),
+			'points' => array()
+		);
 		$numPoints = count($siteInvestigation->depths);
 
-		$series[] = array(-$margin, 0);
+		$series['points'][] = array(-$margin, 0);
 		foreach ($siteInvestigation->depths as $i => $measurement) {
-			$series[] = array(
-				($siteInvestigation->width->value / ($numPoints - 1) * $i), floatval($measurement->value)
+			$series['points'][] = array(
+				($siteInvestigation->width->value / ($numPoints - 1) * $i),
+				floatval($measurement->value)
 			);
 		}
-		$series[] = array($maxWidth, 0);
+		$series['points'][] = array($maxWidth, 0);
 
 		return $series;
 	}
