@@ -3,7 +3,7 @@
 class IndexController extends BaseController
 {
 	public function indexAction() {
-		$this->view->title = 'Home';
+		$this->view->title = 'Welcome to the River Cruncher!';
 	}
 
 }

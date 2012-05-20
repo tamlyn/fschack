@@ -43,50 +43,6 @@ class Model_Investigation extends Model_Base{
 		return Model_SiteInvestigation::fetchAll('investigationId = :id', array(':id'=>$this->id));
 	}
 
-	public function getMax($type){
-		$siteInvestigations = $this->getSiteInvestigations();
-		$fname = str_replace(' ','', ucwords(implode(' ', explode('_', $type))));
-		$maxProperty = "max".$fname;
-		$minProperty = "min".$fname;
-		$this->$maxProperty =0;
-		$this->$minProperty =99999;
-		foreach($siteInvestigations as $si){
-			foreach($si->getMeasurementsByType($type) as $value){
-				if(($value->value > $this->$maxProperty) && $value->value){
-					$this->$maxProperty = $value->value;
-				}
-				if(($value->value < $this->$minProperty) && $value->value){
-					$this->$minProperty = $value->value;
-				}
-
-			}
-		}
-		return $this->$maxProperty;
-	}
-
-	public function getMin($type){
-		$maxFunctionName = "max".str_replace(' ','', ucwords(implode(' ', explode('_', $type))));
-		$minPropertyName = "min".str_replace(' ','', ucwords(implode(' ', explode('_', $type))));
-		$this->$maxFunctionName();
-		return $this->$minPropertyName;
-	}
-
-
-	public function getMinDepth(){
-		return (float)$this->getMin('getMaxDepth', 'minDepth');
-	}
-
-	public function getMaxDepth(){
-		return (float)$this->getMax('depth');
-	}
-
-	public function getMinWaterWidth(){
-		return (float)$this->getMin('water_width');
-	}
-
-	public function getMaxWaterWidth(){
-		return (float)$this->getMax('water_width');
-	}
 
 	// only use this for display purposes
 	public function getDateString() {
