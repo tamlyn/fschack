@@ -18,18 +18,11 @@ class InvestigationController extends BaseController
 	public function sitesAction() {
 		$investigation = Model_Investigation::fetchById($this->_request->id);
 
-		$siteInvestigation = $investigation->siteInvestigations[0];
-
-		$maxWidth = 1;
-		$margin = ($maxWidth - $siteInvestigation->width->value) / 2;
 		$series = array();
-		$numPoints = count($siteInvestigation->depths);
-
-		$series[] = array(-$margin, 0);
-		foreach ($siteInvestigation->depths as $i => $measurement) {
-			$series[] = array(($siteInvestigation->width->value/($numPoints-1)*$i), floatval($measurement->value));
+		$maxDepth = $investigation->getMaxWaterWidth();
+		foreach($investigation->siteInvestigations as $siteInvestigation) {
+			$series[] = $this->makeDepthSeries($siteInvestigation, $maxDepth);
 		}
-		$series[] = array($maxWidth, 0);
 
 		$this->view->graphData = array(
 			'type' => 'depth',
@@ -46,6 +39,10 @@ class InvestigationController extends BaseController
 				'legend'=>array(
 					'position'=>'none'
 				),
+				'animation' => array(
+					'duration' => 1000,
+		            'easing' => 'out'
+				)
 			),
 			'series' => $series
 		);
@@ -57,6 +54,22 @@ class InvestigationController extends BaseController
 		$this->view->minWaterWidth = $investigation->minWaterWidth;
 
 		$this->view->investigation = $investigation;
+	}
+
+	protected function makeDepthSeries($siteInvestigation, $maxWidth) {
+		$margin = ($maxWidth - $siteInvestigation->width->value) / 2;
+		$series = array();
+		$numPoints = count($siteInvestigation->depths);
+
+		$series[] = array(-$margin, 0);
+		foreach ($siteInvestigation->depths as $i => $measurement) {
+			$series[] = array(
+				($siteInvestigation->width->value / ($numPoints - 1) * $i), floatval($measurement->value)
+			);
+		}
+		$series[] = array($maxWidth, 0);
+
+		return $series;
 	}
 
 	public function exportAction() {
