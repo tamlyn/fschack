@@ -75,7 +75,8 @@ class InvestigationController extends BaseController
 		$series[] = array(-$margin, 0);
 		foreach ($siteInvestigation->depths as $i => $measurement) {
 			$series[] = array(
-				($siteInvestigation->width->value / ($numPoints - 1) * $i), floatval($measurement->value)
+				($siteInvestigation->width->value / ($numPoints - 1) * $i),
+				floatval($measurement->value)
 			);
 		}
 		$series[] = array($maxWidth, 0);

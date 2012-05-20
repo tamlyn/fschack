@@ -64,14 +64,30 @@ app.charts = {
 	init: function() {
 		app.charts.chart = new google.visualization.LineChart(document.getElementById('chart'));
 		app.charts.drawDepthSeries(app.charts.currentSite);
+
+		var updateButtonState = function() {
+			if (app.charts.currentSite == (window.graphData.series.length - 1)) {
+				$('input.next').attr('disabled', 'disabled');
+			} else {
+				$('input.next').removeAttr('disabled');
+			}
+			if (app.charts.currentSite == 0) {
+				$('input.prev').attr('disabled', 'disabled');
+			} else {
+				$('input.prev').removeAttr('disabled');
+			}
+		};
+
 		$('input.next').click(function(){
-			app.charts.currentSite = (app.charts.currentSite + 1) % window.graphData.series.length;
-			app.charts.drawDepthSeries(app.charts.currentSite);
+			app.charts.drawDepthSeries(++app.charts.currentSite);
+			updateButtonState();
 		});
 		$('input.prev').click(function () {
-			app.charts.currentSite = (app.charts.currentSite - 1) % window.graphData.series.length;
-			app.charts.drawDepthSeries(app.charts.currentSite);
+			app.charts.drawDepthSeries(--app.charts.currentSite);
+			updateButtonState();
 		});
+
+		updateButtonState();
 	},
 
 	drawDepthSeries: function(index) {
