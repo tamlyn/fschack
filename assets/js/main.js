@@ -26,7 +26,7 @@ app.init = {
 		'#chart': function($element) {
 			google.load('visualization', '1.0', {'packages':['corechart']});
 
-			google.setOnLoadCallback(app.charts.draw);
+			google.setOnLoadCallback(app.charts.init);
 		},
 
 		'.dtable': function($element) {
@@ -44,31 +44,37 @@ app.init = {
 };
 
 app.charts = {
-	draw: function() {
+	init: function() {
+		var stuff = app.charts.drawers[window.graphData.type](window.graphData.series);
 
-		// Create the data table.
-		data = new google.visualization.DataTable();
-		data.addColumn('string', 'Measurement');
-		data.addColumn('number', 'Depth');
-		data.addRows(window.graphData);
-
-		// Set chart options
-		var options = {
-			hAxis:{
-				title: 'Measurements'
-			},
-			vAxis: {
-				title: 'Depth (m)',
-				direction: -1
-			},
-			legend: {
-				position: 'none'
-			}
-		};
-
-		// Instantiate and draw our chart, passing in some options.
 		var chart = new google.visualization.LineChart(document.getElementById('chart'));
-		chart.draw(data, options);
+		chart.draw(stuff.data, stuff.options);
+	},
+
+	drawers: {
+		depth: function(series) {
+
+			var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Measurement');
+			data.addColumn('number', 'Depth');
+			data.addRows(series);
+
+			// Set chart options
+			var options = {
+				hAxis:{
+					title:'Measurements'
+				},
+				vAxis:{
+					title:'Depth (m)',
+					direction:-1
+				},
+				legend:{
+					position:'none'
+				}
+			};
+
+			return {data: data, options: options};
+		}
 	}
 }
 

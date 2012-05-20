@@ -1,7 +1,6 @@
 <?php  
 
 class Model_SiteInvestigation extends Model_Base{	
-	public $id;
 	protected $_tableName = 'siteinvestigations';
 	
 	function getMeasurementsByType($type){
@@ -14,6 +13,9 @@ class Model_SiteInvestigation extends Model_Base{
 		array_unshift($depths, new Model_Measurement(array('value' => 0)));
 		return $depths;
 	}
-	
+
+	function getWidth() {
+		return array_shift($this->getMeasurementsByType('water_width'));
+	}
 
 }
