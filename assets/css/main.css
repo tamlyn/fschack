@@ -146,3 +146,23 @@ table.dataTable tr.selected td {
 table.dataTable tr.selected td.sorting_1 {
 	background-color: #d6e9c6;
 }
+
+.messages {
+	clear: left;
+	list-style: none;
+	padding: 0 0 10px;
+	margin: 0;
+}
+
+.messages li {
+	padding: 5px 5px 5px 25px;
+	margin: 0 0 10px;
+	background: #ddf url(../img/information.png) no-repeat 4px 5px;
+	border: 1px solid #88f;
+}
+
+.messages li.error {
+	background-color: #fdd;
+	border-color: #e77;
+	background-image: url(../img/exclamation.png);
+}

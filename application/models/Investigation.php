@@ -4,12 +4,13 @@ class Model_Investigation extends Model_Base{
 	protected $_tableName = 'investigations';
 
 	static function insert($data){
-		$investigation = new Model_Investigation($data);
-		$investigation->date = $investigation->date;
-		$investigation->centre = $investigation->centre;
+		$investigation = new Model_Investigation();
+		$investigation->startDate = $data->date;
+		$investigation->schoolName = $data->school;
+		$investigation->centre = $data->centre;
 		$investigation->save();
+
 		foreach($data->siteInvestigations as $siteInvestigation){
-			print_r($siteInvestigation);
 			$site = Model_Site::fetchByCentreAndTitle($investigation->centre, $siteInvestigation->site_name);
 			if(!$site){
 				$site = new Model_Site();
@@ -37,9 +38,7 @@ class Model_Investigation extends Model_Base{
 	}
 
 	public function getSiteInvestigations() {
-		$stmt = $this->_db->prepare('SELECT * FROM siteinvestigations WHERE investigationId = :id');
-		$stmt->execute(array(':id'=>$this->id));
-		return $this->siteInvestigations = $this->objectify($stmt);
+		return Model_SiteInvestigation::fetchAll('investigationId = :id', array(':id'=>$this->id));
 	}
 
 }
