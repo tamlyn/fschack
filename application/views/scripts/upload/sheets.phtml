@@ -1,5 +1,6 @@
 <form method="post" action="<?php echo $this->url(array('action'=>'import')); ?>" class="uniForm">
 	<fieldset class="inlineLabels">
+		<legend><?php echo substr($this->uploadedFile, strrpos($this->uploadedFile, DIRECTORY_SEPARATOR)+1); ?></legend>
 		<input type="hidden" name="phase" value="sheets" />
 		<div class="ctrlHolder">
 			<label for="date">Date</label>

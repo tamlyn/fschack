@@ -4,21 +4,21 @@
 	<form method="post" action="<?php echo $this->url(); ?>" class="uniForm">
 		<fieldset class="inlineLabels">
 			<input type="hidden" name="phase" value="definition" />
-			<input type="hidden" name="hash" value="<?php echo $this->todo['hash']; ?>" />
+			<input type="hidden" name="hash" value="<?php echo $this->todo->hash; ?>" />
 			<input type="hidden" name="date" value="<?php echo $this->date; ?>" />
 			<input type="hidden" name="school" value="<?php echo $this->school; ?>" />
 			<input type="hidden" name="centre" value="<?php echo $this->centre; ?>" />
 			<?php foreach ($this->sheets as $sheet) : ?>
 			<input type="hidden" name="sheets[]" value="<?php echo $sheet; ?>" />
 			<?php endforeach; ?>
-				<?php foreach ($this->todo['rows'] as $index=>$row) : ?>
+				<?php foreach ($this->todo->rows as $index=>$row) : ?>
 				<div class="ctrlHolder">
 					<select name="fields[<?php echo $index; ?>]">
 						<?php foreach ($this->fields as $field=>$label) : ?>
 						<option value="<?php echo $field; ?>" <?php if ($this->enteredFields[$index] == $field) echo 'selected'; ?>><?php echo $label; ?></option>
 						<?php endforeach; ?>
 					</select>
-					Row <?php echo $index; ?>: <?php echo '<b>' . ($row ?: '[no title]') . '</b> ' . ($this->todo['examples'][$index] ? '(e.g. ' . implode(', ', $this->todo['examples'][$index]) . ')' : '[empty]'); ?>
+					Row <?php echo $index; ?>: <?php echo '<b>' . ($row ?: '[no title]') . '</b> ' . ($this->todo->examples[$index] ? '(e.g. ' . implode(', ', $this->todo->examples[$index]) . ')' : '[empty]'); ?>
 				</div>
 				<?php endforeach; ?>
 			<div class="buttonHolder">

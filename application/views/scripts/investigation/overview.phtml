@@ -36,7 +36,7 @@
 		<td><?php echo round($siteInvestigation->getMeanDepth(), 2); ?></td>
 		<td><?php echo round($siteInvestigation->getMeanFlowRate(), 2); ?></td>
 		<td>
-			<a href="<?php echo $this->url(array('controller'=>'site-investigation', 'action' => 'delete', 'id' => $siteInvestigation->id)); ?>" class="autoConfirm">Delete</a>
+			<a href="<?php echo $this->url(array('controller'=>'site-investigation', 'action' => 'delete', 'id' => $siteInvestigation->id, 'source'=>'investigation')); ?>" class="autoConfirm">Delete</a>
 <!--			<a href="--><?php //echo $this->url(array('controller'=>'site-investigation', 'action' => 'export', 'id' => $siteInvestigation->id)); ?><!--">Export as CSV</a>-->
 		</td>
 	</tr>

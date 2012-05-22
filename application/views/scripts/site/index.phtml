@@ -2,17 +2,20 @@
 	<thead>
 		<tr>
 			<th>Title</th>
+			<th>Investigations</th>
 			<th>Centre</th>
 			<th></th>
 		</tr>
 	</thead>
 	<tbody>
-	<?php foreach ($this->sites as $site): ?>
+	<?php foreach ($this->sites as $site): if (count($site->siteInvestigations) == 0) continue; ?>
 		<tr>
 			<td><?php echo $site->title; ?></td>
+			<td><?php echo count($site->siteInvestigations); ?></td>
 			<td><?php echo $site->centre; ?></td>
 			<td>
-				<a href="<?php echo $this->url(array('action' => 'overview', 'id' => $site->id)); ?>">View</a>
+				<a href="<?php echo $this->url(array('action' => 'overview', 'id' => $site->id)); ?>">View</a> |
+				<a href="<?php echo $this->url(array('action' => 'delete', 'id' => $site->id)); ?>" class="autoConfirm">Delete</a>
 			</td>
 		</tr>
 	<?php endforeach; ?>

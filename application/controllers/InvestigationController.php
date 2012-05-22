@@ -15,7 +15,7 @@ class InvestigationController extends BaseController
 				$this->_helper->FlashMessenger(array('info'=>'Investigation deleted'));
 			}
 		}
-		$this->_helper->redirector->gotoRoute(array('action'=>'index'));
+		$this->_helper->redirector->gotoRoute(array('action'=>'index', 'id'=>null));
 	}
 
 	public function overviewAction() {
@@ -27,7 +27,6 @@ class InvestigationController extends BaseController
 			'columns' => array(
 				array('type'=>'string', 'label'=>'Site'),
 				array('type' => 'number', 'label' => 'Mean depth'),
-//				array('type' => 'number', 'label' => 'Mean flowrate'),
 				array('type' => 'number', 'label' => 'Discharge')
 			),
 			'points' => array()
@@ -36,7 +35,6 @@ class InvestigationController extends BaseController
 			$series1['points'][] = array(
 				$siteInvestigation->site->title,
 				$siteInvestigation->meanDepth,
-//				$siteInvestigation->meanFlowrate,
 				$siteInvestigation->discharge
 			);
 		}
@@ -45,6 +43,10 @@ class InvestigationController extends BaseController
 			'options' => array(
 				'hAxis' => array(
 					'title' => 'Sites',
+					'textStyle' => array(
+						'color' => '#666',
+						'fontSize'=>10
+					)
 //					'minValue'=>-$margin,
 //					'maxValue'=>$maxWidth
 				),

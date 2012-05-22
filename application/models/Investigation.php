@@ -25,7 +25,7 @@ class Model_Investigation extends Model_Base{
 			$siteInv->siteOrder = $i;
 			$siteInv->save();
 
-			foreach($siteInvestigation->data as $type => $values){
+			foreach($siteInvestigation->measurements as $type => $values){
 				foreach($values as $i => $value){
 					$measurement = new Model_Measurement();
 					$measurement->siteInvestigationId = $siteInv->id;
@@ -40,7 +40,9 @@ class Model_Investigation extends Model_Base{
 	}
 
 	public function getSiteInvestigations() {
-		return Model_SiteInvestigation::fetchAll('investigationId = :id', array(':id'=>$this->id));
+		$this->siteInvestigations = Model_SiteInvestigation::fetchAll('investigationId = :id', array(':id'=>$this->id));
+		usort($this->siteInvestigations, function($a, $b) { return $a->siteOrder > $b->siteOrder ? 1 : -1; });
+		return $this->siteInvestigations;
 	}
 
 

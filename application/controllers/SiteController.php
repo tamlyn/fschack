@@ -3,6 +3,7 @@
 class SiteController extends BaseController
 {
 	public function indexAction() {
+		$this->view->title = 'All Sites';
 		$this->view->sites = Model_Site::fetchAll();
 	}
 
@@ -11,10 +12,10 @@ class SiteController extends BaseController
 			$site = Model_Site::fetchById($this->_request->id);
 			if ($site) {
 				$site->delete();
-				$this->_helper->FlashMessenger(array('info'=>'Investigation deleted'));
+				$this->_helper->FlashMessenger(array('info'=>'Site deleted'));
 			}
 		}
-		$this->_helper->redirector->gotoRoute(array('action'=>'index'));
+		$this->_helper->redirector->gotoRoute(array('action'=>'index', 'id'=>null));
 	}
 
 	public function overviewAction() {
@@ -34,10 +35,10 @@ class SiteController extends BaseController
 		);
 		foreach ($site->siteInvestigations as $siteInvestigation) {
 			$series1['points'][] = array(
-				strtotime($siteInvestigation->investigation->startDate)*1000,
-				$siteInvestigation->meanDepth,
+				(strtotime($siteInvestigation->investigation->startDate)+6000)*1000,
+				round($siteInvestigation->meanDepth, 2),
 //				$siteInvestigation->meanFlowrate,
-				$siteInvestigation->discharge
+				round($siteInvestigation->discharge, 2)
 			);
 		}
 

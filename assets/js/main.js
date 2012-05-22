@@ -96,6 +96,7 @@ app.charts = {
 	},
 
 	drawDepthSeries: function(index) {
+        console.log(window.graphData);
 		var series = window.graphData.series[index];
 
 		app.setTitle(series.title);
@@ -104,8 +105,9 @@ app.charts = {
 			data.addColumn(series.columns[i].type, series.columns[i].label);
 		}
 		for (var j in series.points) {
-
-			if (window.graphData.options.hAxis.title == 'Date') series.points[j][0] = new Date(series.points[j][0]);
+			if (window.graphData.options.hAxis.title == 'Date') {
+                series.points[j][0] = new Date(series.points[j][0]);
+            }
 		}
 		data.addRows(series.points);
 

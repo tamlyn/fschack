@@ -3,6 +3,7 @@
 		<tr>
 			<th>Date</th>
 			<th>Name</th>
+			<th>Sites</th>
 			<th>Centre</th>
 			<th>School</th>
 			<th></th>
@@ -13,6 +14,7 @@
 		<tr>
 			<td><?php echo $investigation->startDate; ?></td>
 			<td><?php echo $investigation->name; ?></td>
+			<td><?php echo count($investigation->siteInvestigations); ?></td>
 			<td><?php echo $investigation->centre; ?></td>
 			<td><?php echo $investigation->schoolName; ?></td>
 			<td>

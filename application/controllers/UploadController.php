@@ -7,7 +7,7 @@ class UploadController extends BaseController {
 	private $fields;
 
 	public function init() {
-		$this->tmpPath = APPLICATION_PATH . '/../data/uploads/';
+		$this->tmpPath = implode(DIRECTORY_SEPARATOR, array(APPLICATION_PATH, '..', 'data', 'uploads', ''));
 		@mkdir($this->tmpPath, 0777, true);
 
 		$this->fields = array(
@@ -17,7 +17,8 @@ class UploadController extends BaseController {
 			'gradient_degrees' => 'Gradient (degrees)',
 			'gradient_diff'    => 'Gradient (m/m)',
 			'depth'            => 'Depth',
-			'flowrate'         => 'Flow Rate',
+			'flowrate_speed'   => 'Flow Rate (m/s)',
+			'flowrate_revs'    => 'Flow Rate (s)', // impellor duration
 			'bedload_length'   => 'Bedload Length',
 			'roundness'        => 'Roundness'
 		);
@@ -72,11 +73,42 @@ class UploadController extends BaseController {
 		return null;
 	}
 
+	private function showMissingFieldsForm($sheetData) {
+		$guesses = array();
+		foreach ($sheetData->rows as $i=>$row) {
+			$toCompare = strtolower($row);
+			$guess = null;
+			if (strpos($toCompare, 'mean') === false && strpos($toCompare, 'mode') === false && strpos($toCompare, 'average') === false && count($sheetData->examples[$i]) > 0) {
+				if (strpos($toCompare, 'depth') !== false) {
+					$guess = 'depth';
+				} else if (strpos($toCompare, 'width') !== false) {
+					$guess = 'water_width';
+				} else if (strpos($toCompare, 'wetted') !== false) {
+					$guess = 'wetted_perimeter';
+				} else if (strpos($toCompare, 'gradient') !== false) {
+					$guess = (strpos($toCompare, 'm') === false ? 'gradient_degrees' : 'gradient_diff');
+				} else if (strpos($toCompare, 'flowrate') !== false || strpos($toCompare, 'flow rate') !== false || strpos($toCompare, 'velocity') !== false) {
+					$guess = (strpos($toCompare, 'revs') === false ? 'flowrate_speed' : 'flowrate_revs');
+				} else if (strpos($toCompare, 'bedload') !== false) {
+					$guess = 'bedload_length';
+				} else if (strpos($toCompare, 'angular') !== false || strpos($toCompare, 'round') !== false) {
+					$guess = 'roundness';
+				}
+			}
+			$guesses[$i] = $guess;
+		}
+		$this->view->title = 'Import data - file format';
+		$this->view->sheets = $this->_request->sheets;
+		$this->view->todo = $sheetData;
+		$this->view->enteredFields = $guesses;
+		$this->view->fields = array_merge(array('ignore'=>'[ignore]'), $this->fields);
+	}
+
 	public function importAction() {
 		$this->view->title = 'Import data - file info';
-		$uploadedFile = $this->getUploadedFile();
+		$this->view->uploadedFile = $this->getUploadedFile();
 
-		if (!$uploadedFile) {
+		if (!$this->view->uploadedFile) {
 			$this->_helper->FlashMessenger(array('error'=>'No uploaded file found'));
 			$this->_helper->redirector->gotoRoute(array('action'=>'index'));
 		}
@@ -85,7 +117,7 @@ class UploadController extends BaseController {
 
 		$sheets = array();
 		$spreadsheet = new Spreadsheet_Excel_Reader();
-		$spreadsheet->read($uploadedFile);
+		$spreadsheet->read($this->view->uploadedFile);
 		foreach ($spreadsheet->boundsheets as $sheet) {
 			$sheets[] = $sheet;
 		}
@@ -146,8 +178,9 @@ class UploadController extends BaseController {
 				}
 			}
 
-			// fetch each sheet signature
-			$hashes = array();
+			// fetch each sheet signature, and the corresponding fields
+			$fieldsQuery = $db->prepare('SELECT fields FROM file_formats WHERE hash = :hash');
+			$sheets = array();
 			foreach ($this->_request->sheets as $sheetIndex) {
 				$sheet = $spreadsheet->sheets[$sheetIndex];
 				$cellValues = array();
@@ -163,58 +196,25 @@ class UploadController extends BaseController {
 					}
 				}
 				$hash = md5(implode(',', $cellValues));
-				if (!array_key_exists($hash, $hashes)) {
-					$hashes[$hash] = array('rows'=>$cellValues, 'examples'=>$examples, 'hash'=>$hash, 'sheetIndexes'=>array());
-				}
-				$hashes[$hash]['sheetIndexes'][] = $sheetIndex;
-			}
-
-			// get the defined fields for each signature. Stop if any are missing
-			$statement = $db->prepare('SELECT fields FROM file_formats WHERE hash = :hash');
-			$errors = false;
-			foreach ($hashes as $hash=>$sheetData) {
-				$statement->execute(array(':hash'=>$hash));
-				$fields = $statement->fetch(PDO::FETCH_COLUMN);
-				if (!$fields) {
-					$guesses = array();
-					foreach ($sheetData['rows'] as $i=>$row) {
-						$toCompare = strtolower($row);
-						$guess = null;
-						if (strpos($toCompare, 'mean') === false && strpos($toCompare, 'mode') === false && strpos($toCompare, 'average') === false) {
-							if (strpos($toCompare, 'depth') !== false) {
-								$guess = 'depth';
-							} else if (strpos($toCompare, 'width') !== false) {
-								$guess = 'water_width';
-							} else if (strpos($toCompare, 'wetted') !== false) {
-								$guess = 'wetted_perimeter';
-							} else if (strpos($toCompare, 'gradient') !== false) {
-								$guess = (strpos($toCompare, 'm') === false ? 'gradient_degrees' : 'gradient_diff');
-							} else if ((strpos($toCompare, 'flowrate') !== false || strpos($toCompare, 'flow rate') !== false || strpos($toCompare, 'velocity') !== false) && strpos($toCompare, 'revs') === false) {
-								$guess = 'flowrate';
-							} else if (strpos($toCompare, 'bedload') !== false) {
-								$guess = 'bedload_length';
-							} else if (strpos($toCompare, 'angular') !== false || strpos($toCompare, 'round') !== false) {
-								$guess = 'roundness';
-							}
-						}
-						$guesses[$i] = $guess;
+				if (!array_key_exists($hash, $sheets)) {
+					$fieldsQuery->execute(array(':hash'=>$hash));
+					$fields = $fieldsQuery->fetch(PDO::FETCH_COLUMN);
+					$sheets[$hash] = (object)array('rows'=>$cellValues, 'examples'=>$examples, 'hash'=>$hash, 'sheetIndexes'=>array(), 'fields'=>$fields);
+					if (!$fields) {
+						$this->showMissingFieldsForm($sheets[$hash]);
+						return;
 					}
-					$this->view->title = 'Import data - file format';
-					$this->view->sheets = $this->_request->sheets;
-					$this->view->todo = $sheetData;
-					$this->view->enteredFields = $guesses;
-					$this->view->fields = array_merge(array('ignore'=>'[ignore]'), $this->fields);
-					$errors = true;
-					break;
 				}
+				$sheets[$hash]->sheetIndexes[] = $sheetIndex;
 			}
 
 			// save the data from each sheet, using the fields for its signature
-			if (!$errors) {
-				$allInvestigations = array();
-				foreach ($hashes as $hash=>$sheetData) {
-					foreach ($sheetData['sheetIndexes'] as $sheetIndex) {
-						$investigation = $this->readInvestigation($spreadsheet, (array)json_decode($fields), $sheetIndex);
+			$allInvestigations = array();
+			foreach ($sheets as $hash=>$sheetData) {
+				$fields = (array)json_decode($fields);
+				foreach ($sheetData->sheetIndexes as $sheetIndex) {
+					$investigation = $this->readInvestigation($spreadsheet, $fields, $sheetIndex);
+					if (count($investigation->siteInvestigations) > 0) {
 						$investigation->date = $this->view->date;
 						$investigation->school = $this->view->school;
 						$investigation->centre = $this->view->centre;
@@ -222,12 +222,12 @@ class UploadController extends BaseController {
 						$allInvestigations[] = $investigation;
 					}
 				}
-
-				$this->emptyTempDir();
-
-				$this->_helper->FlashMessenger(array('info'=>'All done! Imported ' . count($allInvestigations) . ' investigations'));
-				$this->_helper->redirector->gotoRoute(array('action'=>'index'));
 			}
+
+			$this->emptyTempDir();
+
+			$this->_helper->FlashMessenger(array('info'=>'All done! Imported ' . count($allInvestigations) . ' investigations'));
+			$this->_helper->redirector->gotoRoute(array('action'=>'index'));
 		}
 	}
 
@@ -258,21 +258,34 @@ class UploadController extends BaseController {
 		$sheetName = $spreadsheet->boundsheets[$sheetIndex]['name'];
 		$sheet = $spreadsheet->sheets[$sheetIndex];
 
+		// for all cells in the site names row, create an empty object to hold the measurements
 		$sites = array();
 		for ($col = 2; $col <= $sheet['numCols']; $col++) {
 			if (isset($sheet['cells'][$sitesRow][$col])) {
-				$sites[$col] = (object)array('site_name'=>$sheet['cells'][$sitesRow][$col], 'data'=>array());
-			}
-		}
-
-		foreach ($sites as $col=>$siteData) {
-			foreach ($fields as $type=>$rows) {
-				$siteData->data[$type] = array();
-				foreach ($rows as $row) {
-					$siteData->data[$type][] = (isset($sheet['cells'][$row][$col]) ? $sheet['cells'][$row][$col] : '');
+				$siteName = $sheet['cells'][$sitesRow][$col];
+				if (strpos(strtolower($siteName), 'average') === false) {
+					$sites[$col] = (object)array('site_name'=>$siteName, 'measurements'=>array());
 				}
 			}
 		}
+
+		// populate the measurements
+		foreach ($sites as $col=>$siteData) {
+			foreach ($fields as $type=>$rowIndexes) {
+				$siteData->measurements[$type] = array();
+				foreach ($rowIndexes as $rowIndex) {
+					$siteData->measurements[$type][] = (isset($sheet['cells'][$rowIndex][$col]) ? $sheet['cells'][$rowIndex][$col] : '');
+				}
+			}
+		}
+
+		// remove any sites with no data
+		foreach ($sites as $col=>$siteData) {
+			if (empty($siteData->measurements['water_width']) || empty($siteData->measurements['water_width'][0])) {
+				unset($sites[$col]);
+			}
+		}
+
 		return (object)array('name'=>$sheetName, 'siteInvestigations'=>array_values($sites));
 	}
 }

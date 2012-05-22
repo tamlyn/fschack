@@ -17,22 +17,24 @@
 		<th>Width</th>
 		<th>Mean depth</th>
 		<th>Mean flow rate</th>
+		<th>Discharge (cross-section * mean flow rate)</th>
 		<th></th>
 	</tr>
 	</thead>
 	<tbody>
 	<?php foreach ($this->site->siteInvestigations as $siteInvestigation) : ?>
-	<tr>
-		<td><?php echo $siteInvestigation->investigation->dateString; ?></td>
-		<td><?php echo $siteInvestigation->investigation->name; ?></td>
-		<td><?php echo $siteInvestigation->getSite()->title; ?></td>
-		<td><?php echo $siteInvestigation->getWidth()->value; ?></td>
-		<td><?php echo round($siteInvestigation->getMeanDepth(), 2); ?></td>
-		<td><?php echo round($siteInvestigation->getMeanFlowRate(), 2); ?></td>
-		<td>
-			<a href="<?php echo $this->url(array('controller'=>'site-investigation', 'action' => 'delete', 'id' => $siteInvestigation->id)); ?>" class="autoConfirm">Delete</a>
-		</td>
-	</tr>
+		<tr>
+			<td><?php echo $siteInvestigation->investigation->dateString; ?></td>
+			<td><?php echo $siteInvestigation->investigation->name; ?></td>
+			<td><?php echo $siteInvestigation->getSite()->title; ?></td>
+			<td><?php echo $siteInvestigation->getWidth()->value; ?></td>
+			<td><?php echo round($siteInvestigation->getMeanDepth(), 2); ?></td>
+			<td><?php echo round($siteInvestigation->getMeanFlowRate(), 2); ?></td>
+			<td><?php echo round($siteInvestigation->getDischarge(), 2); ?></td>
+			<td>
+				<a href="<?php echo $this->url(array('controller'=>'site-investigation', 'action' => 'delete', 'id' => $siteInvestigation->id, 'source'=>'site')); ?>" class="autoConfirm">Delete</a>
+			</td>
+		</tr>
 	<?php endforeach; ?>
 	</tbody>
 </table>

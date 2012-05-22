@@ -25,8 +25,22 @@ class Model_Site extends Model_Base{
 
 
 	public function getSiteInvestigations() {
-		return Model_SiteInvestigation::fetchAll('siteId = :id', array(':id'=>$this->id));
+		$this->siteInvestigations = Model_SiteInvestigation::fetchAll('siteId = :id', array(':id'=>$this->id));
+		usort($this->siteInvestigations, function ($a, $b) {
+			$aVal = $a->investigation->startDate;
+			$bVal = $b->investigation->startDate;
+			return strcmp($aVal, $bVal);
+		});
+		return $this->siteInvestigations;
 	}
+
+	public function delete() {
+		foreach ($this->siteInvestigations as $siteInvestigation) {
+			$siteInvestigation->delete();
+		}
+		parent::delete();
+	}
+
 	/*
 	function getId(){
 		$q = "select site_id from site_alias a left join sites s on s.id = a.site_id where a.alias = ? and s.centre = ?";

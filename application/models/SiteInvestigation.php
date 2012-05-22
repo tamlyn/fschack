@@ -8,7 +8,11 @@ class Model_SiteInvestigation extends Model_Base{
 	}
 
 	function getMeasurementsByType($type){
-		return Model_Measurement::fetchAll('type = :type and siteInvestigationId = :id', array(':type'=>$type, ':id'=>$this->id));
+		$measurements = Model_Measurement::fetchAll('type = :type and siteInvestigationId = :id', array(':type'=>$type, ':id'=>$this->id));
+		if (!$measurements) {
+			$measurements = array(new Model_Measurement(array('value'=>0)));
+		}
+		return $measurements;
 	}
 
 	function getMeanMeasurement($type){
@@ -42,11 +46,11 @@ class Model_SiteInvestigation extends Model_Base{
 	}
 
 	function getFlowrates() {
-		return $this->getMeasurementsByType('flowrate');
+		return $this->getMeasurementsByType('flowrate_speed');
 	}
 	
 	function getMeanFlowrate(){
-		return $this->getMeanMeasurement('flowrate');
+		return $this->getMeanMeasurement('flowrate_speed');
 	}
 
 	function getBedloadLengths(){
