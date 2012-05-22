@@ -57,11 +57,44 @@ class BaseController extends Zend_Controller_Action {
 				floatval($measurement->value)
 			);
 		}
-		$series['points'][] = array($maxWidth, 0);
+		$series['points'][] = array($maxWidth-$margin, 0);
 
 		return $series;
 	}
 
+	protected function makeRiverJourneyData($entity) {
+		$series = array();
+		$maxWidth = $entity->getMaxWaterWidth();
+		$maxDepth = $entity->getMaxDepth();
+		foreach($entity->siteInvestigations as $siteInvestigation) {
+			$series[] = $this->makeDepthSeries($siteInvestigation, $maxWidth);
+		}
+
+		return array(
+			'type' => 'depth',
+			'options' => array(
+				'hAxis' => array(
+					'title'=>'River width (m)',
+//					'minValue'=>-$margin,
+//					'maxValue'=>$maxWidth
+				),
+				'vAxis'=>array(
+					'title'=>'Depth (m)',
+					'direction'=>-1,
+					'maxValue'=>$maxDepth
+				),
+				'legend'=>array(
+					'position'=>'none'
+				),
+				'animation' => array(
+					'duration' => 1000,
+					'easing' => 'out'
+				),
+				'areaOpacity'=>0.8,
+			),
+			'series' => $series
+		);
+	}
 }
 	
 ?>

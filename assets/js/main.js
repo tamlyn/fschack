@@ -67,7 +67,11 @@ app.charts = {
 	currentIndex: 0,
 
 	init: function() {
-		app.charts.chart = new google.visualization.LineChart(document.getElementById('chart'));
+        if (window.graphData.type == 'depth') {
+    		app.charts.chart = new google.visualization.AreaChart(document.getElementById('chart'));
+        } else {
+    		app.charts.chart = new google.visualization.LineChart(document.getElementById('chart'));
+        }
 		app.charts.drawDepthSeries(app.charts.currentIndex);
 
 		$('input.next').click(function(){
@@ -96,7 +100,6 @@ app.charts = {
 	},
 
 	drawDepthSeries: function(index) {
-        console.log(window.graphData);
 		var series = window.graphData.series[index];
 
 		app.setTitle(series.title);

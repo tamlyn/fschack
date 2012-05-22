@@ -103,43 +103,8 @@ class InvestigationController extends BaseController
 	}
 
 	public function sitesAction() {
-		$investigation = Model_Investigation::fetchById($this->_request->id);
-
-		$series = array();
-		$maxDepth = $investigation->getMaxWaterWidth();
-		foreach($investigation->siteInvestigations as $siteInvestigation) {
-			$series[] = $this->makeDepthSeries($siteInvestigation, $maxDepth);
-		}
-
-		$this->view->graphData = array(
-			'options' => array(
-				'hAxis' => array(
-					'title'=>'River width (m)',
-//					'minValue'=>-$margin,
-//					'maxValue'=>$maxWidth
-				),
-				'vAxis'=>array(
-					'title'=>'Depth (m)',
-					'direction'=>-1
-				),
-				'legend'=>array(
-					'position'=>'none'
-				),
-				'animation' => array(
-					'duration' => 1000,
-		            'easing' => 'out'
-				)
-			),
-			'series' => $series
-		);
-		$this->view->meanFlowrate = $siteInvestigation->getMeanFlowrate();
-		$this->view->meanDepth = $siteInvestigation->getMeanDepth();
-		$this->view->maxDepth = $investigation->maxDepth;
-		$this->view->minDepth = $investigation->minDepth;
-		$this->view->maxWaterWidth = $investigation->maxWaterWidth;
-		$this->view->minWaterWidth = $investigation->minWaterWidth;
-
-		$this->view->investigation = $investigation;
+		$this->view->investigation = Model_Investigation::fetchById($this->_request->id);
+		$this->view->graphData = $this->makeRiverJourneyData($this->view->investigation);
 	}
 
 

@@ -226,22 +226,22 @@ abstract class Model_Base
 	public function getMax($type){
 		$siteInvestigations = $this->getSiteInvestigations();
 		$fname = str_replace(' ','', ucwords(implode(' ', explode('_', $type))));
-		$maxProperty = "max".$fname;
-		$minProperty = "min".$fname;
-		$this->$maxProperty =-99999999;
-		$this->$minProperty =999999999;
+		$maxPropertyName = "max".$fname;
+		$minPropertyName = "min".$fname;
+		$this->$maxPropertyName =-99999999;
+		$this->$minPropertyName =999999999;
 		foreach($siteInvestigations as $si){
 			foreach($si->getMeasurementsByType($type) as $value){
-				if(($value->value > $this->$maxProperty) && is_numeric($value->value)){
-					$this->$maxProperty = $value->value;
+				if(($value->value > $this->$maxPropertyName) && is_numeric($value->value)){
+					$this->$maxPropertyName = $value->value;
 				}
-				if(($value->value < $this->$minProperty) && is_numeric($value->value)){
-					$this->$minProperty = $value->value;
+				if(($value->value < $this->$minPropertyName) && is_numeric($value->value)){
+					$this->$minPropertyName = $value->value;
 				}
 
 			}
 		}
-		return $this->$maxProperty;
+		return $this->$maxPropertyName;
 	}
 
 	public function getMin($type){
