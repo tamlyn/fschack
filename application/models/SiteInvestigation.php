@@ -7,22 +7,23 @@ class Model_SiteInvestigation extends Model_Base{
 		return Model_Measurement::fetchAll('siteInvestigationId = :id', array(':id'=>$this->id));
 	}
 
-	function getMeasurementsByType($type){
+	function getMeasurementsByType($type, $allowNone = false){
 		$measurements = Model_Measurement::fetchAll('type = :type and siteInvestigationId = :id', array(':type'=>$type, ':id'=>$this->id));
-		if (!$measurements) {
+		if (!$measurements && !$allowNone) {
 			$measurements = array(new Model_Measurement(array('value'=>0)));
 		}
 		return $measurements;
 	}
 
-	function getMeanMeasurement($type){
+	function getMeanMeasurement($measurements){
 		$values =  array();
-		foreach($this->getMeasurementsByType($type) as $value){
-			$values[] = $value->value;
+		foreach($measurements as $measurement){
+			$values[] = $measurement->value;
 		}
 		if($values){
 			return array_sum($values) / count($values);
 		}
+		return 0;
 	}
 
 	public function getSite() {
@@ -42,15 +43,22 @@ class Model_SiteInvestigation extends Model_Base{
 		return $this->depths;
 	}
 	function getMeanDepth(){
-		return $this->getMeanMeasurement('depth');
+		return $this->getMeanMeasurement($this->getDepths());
 	}
 
 	function getFlowrates() {
-		return $this->getMeasurementsByType('flowrate_speed');
+		$flowrates = $this->getMeasurementsByType('flowrate_speed', true);
+		if (!$flowrates) {
+			$flowrates = $this->getMeasurementsByType('flowrate_revs');
+			foreach ($flowrates as $flowrate) {
+				$flowrate->value = 1/$flowrate->value; //TODO: How should this be converted?
+			}
+		}
+		return $flowrates;
 	}
 	
 	function getMeanFlowrate(){
-		return $this->getMeanMeasurement('flowrate_speed');
+		return $this->getMeanMeasurement($this->getFlowrates());
 	}
 
 	function getBedloadLengths(){
@@ -58,14 +66,14 @@ class Model_SiteInvestigation extends Model_Base{
 	}
 
 	function getMeanBedloadLength(){
-		return $this->getMeanMeasurement('bedload_length');
+		return $this->getMeanMeasurement($this->getBedloadLengths());
 	}
 	function getRoundnesses(){
 		return $this->getMeasurementsByType('roundness');
 	}
 
 	function getMeanRoundness(){
-		return $this->getMeanMeasurement('roundness');
+		return $this->getMeanMeasurement($this->getRoundnesses());
 	}
 	function getWidth(){
 		return array_shift($this->getMeasurementsByType('water_width'));
