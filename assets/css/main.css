@@ -189,3 +189,23 @@ fieldset input, fieldset select, fieldset textarea {
 div.summary {
 	font-size: 16px;
 }
+
+a.button {
+	height: 23px;
+	line-height: 23px;
+	display: inline-block;
+	font-weight: bold;
+	font-size: 12px;
+	color: #008c9a;
+	text-align: center;
+	border: 1px solid #ccc;
+	background: #eee;
+	padding: 0 10px;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	border-radius: 12px;
+}
+
+a.button:hover {
+	border-color: #008c9a;
+}
